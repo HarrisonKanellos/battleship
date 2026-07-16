@@ -1,10 +1,10 @@
 {
-  "name": "template-repo-1",
+  "name": "battleship",
   "version": "1.0.0",
-  "description": "Template Repository 1 - configured for Javascript webpack projects.",
+  "description": "Classic battleships board game in the browser.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "webpack --config webpack-config/webpack.prod.js",
     "dev": "webpack serve --config webpack-config/webpack.dev.js"
   },
@@ -12,11 +12,13 @@
   "author": "Harrison Kanellos",
   "license": "ISC",
   "devDependencies": {
+    "@babel/preset-env": "^7.29.7",
     "@eslint/js": "^9.39.2",
     "css-loader": "^7.1.2",
     "eslint": "^9.39.2",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.5",
+    "jest": "^30.4.2",
     "prettier": "3.7.4",
     "style-loader": "^4.0.0",
     "webpack": "^5.103.0",
