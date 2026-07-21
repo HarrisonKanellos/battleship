@@ -14,7 +14,6 @@ describe("set coordinates of ship", () => {
         expect(() => {
             gameboard.setCoordinatesOf(ship.name, ship.coordinates);
         }).toThrow(error);
-            
     });
 
     test("doesn't accept invalid number of coordinates", () => {
@@ -23,7 +22,7 @@ describe("set coordinates of ship", () => {
             coordinates: ["A3", "A4", "A5", "A6"],
         };
         const error = new Error(
-            "Length of coordinates array must be equal to length of ship."
+            "Length of coordinates array must be equal to length of ship.",
         );
 
         expect(() => {
@@ -74,7 +73,6 @@ describe("set coordinates of ship", () => {
         expect(() => {
             gameboard.setCoordinatesOf(ship.name, ship.coordinates);
         }).toThrow(error);
-
     });
 
     test("doesn't accept coordinates not in straight line (number)", () => {
