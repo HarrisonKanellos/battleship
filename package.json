@@ -8,6 +8,7 @@
         "build": "webpack --config webpack-config/webpack.prod.js",
         "dev": "webpack serve --config webpack-config/webpack.dev.js"
     },
+    "type": "module",
     "keywords": [],
     "author": "Harrison Kanellos",
     "license": "ISC",

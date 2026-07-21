@@ -1,8 +1,9 @@
 // eslint.config.js
-const { defineConfig } = require("eslint/config");
+import { defineConfig } from "eslint/config";
 import globals from "globals";
+import js from "@eslint/js";
 
-module.exports = defineConfig([
+export default defineConfig([
     {
         files: [["src/*", "**/.js"]],
         languageOptions: {
