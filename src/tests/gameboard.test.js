@@ -3,7 +3,7 @@ import { createGameboard } from "../models/gameboard.js";
 const gameboard = createGameboard();
 gameboard.initShips();
 
-describe("set coordinates of ship", () => {
+describe("set coordinates of ship rejects invalid arguments", () => {
     test("doesn't accept unknown ship name", () => {
         const ship = {
             name: "unknown ship",
@@ -85,5 +85,50 @@ describe("set coordinates of ship", () => {
         expect(() => {
             gameboard.setCoordinatesOf(ship.name, ship.coordinates);
         }).toThrow(error);
+    });
+});
+
+describe("receiving invalid attacks", () => {
+    test("doesn't accept coordinate with incorrect format", () => {
+        excpect(() => {
+            gameboard.receiveAttack("PB7");
+        }).toThrow(RangeError);
+    });
+
+    test("doesn't accept coordinate not in range (letter)", () => {
+        expect(() => {
+            gameboard.receiveAttack("X4");
+        }).toThrow(RangeError);
+    });
+
+    test("doesn't accept coordinate not in range (number)", () => {
+        expect(() => {
+            gameboard.receiveAttack("H21");
+        }).toThrow(RangeError);
+    });
+
+    test("duplicate attack throws an error", () => {
+        const error = new Error("Coordinate has already been attacked.");
+
+        gameboard.receiveAttack("D9");
+        expect(() => {
+            gameboard.receiveAttack("D9");
+        }).toThrow(error);
+    });
+});
+
+describe("receiving valid attacks", () => {
+    gameboard.setCoordinatesOf("destroyer", ["H6", "H7", "H8"]);
+
+    test("attacking a ship registers as hit", () => {
+        gameboard.receiveAttack("H7");
+        expect(gameboard.getHits()).toContain("H7");
+        expect(gameboard.getMisses()).not.toContain("H7");
+    });
+
+    test("missed attack doesn't register as hit", () => {
+        gameboard.receiveAttack("B3");
+        expect(gameboard.getHits()).not.toContain("B3");
+        expect(gameboard.getMisses()).toContain("B3");
     });
 });
