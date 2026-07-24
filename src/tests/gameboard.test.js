@@ -90,7 +90,7 @@ describe("set coordinates of ship rejects invalid arguments", () => {
 
 describe("receiving invalid attacks", () => {
     test("doesn't accept coordinate with incorrect format", () => {
-        excpect(() => {
+        expect(() => {
             gameboard.receiveAttack("PB7");
         }).toThrow(RangeError);
     });
@@ -122,13 +122,13 @@ describe("receiving valid attacks", () => {
 
     test("attacking a ship registers as hit", () => {
         gameboard.receiveAttack("H7");
-        expect(gameboard.getHits()).toContain("H7");
+        expect(gameboard.getHitCoords()).toContain("H7");
         expect(gameboard.getMisses()).not.toContain("H7");
     });
 
     test("missed attack doesn't register as hit", () => {
         gameboard.receiveAttack("B3");
-        expect(gameboard.getHits()).not.toContain("B3");
+        expect(gameboard.getHitCoords()).not.toContain("B3");
         expect(gameboard.getMisses()).toContain("B3");
     });
 });

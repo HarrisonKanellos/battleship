@@ -4,6 +4,7 @@ import * as gameboardChecks from "../helpers/gameboardChecks.js";
 export function createGameboard() {
     const gbState = {
         shipsArr: [],
+        missedAtks: [],
     };
 
     const initShips = () => {
@@ -18,7 +19,13 @@ export function createGameboard() {
         if (!gameboardChecks.shipNameExists(shipName, gbState)) {
             throw new Error("Ship name must exist in ships array.");
         }
-        if (!gameboardChecks.validCoordsArrLength(shipName, coordinatesArr.length, gbState)) {
+        if (
+            !gameboardChecks.validCoordsArrLength(
+                shipName,
+                coordinatesArr.length,
+                gbState,
+            )
+        ) {
             throw new Error(
                 "Length of coordinates array must be equal to length of ship.",
             );
@@ -37,9 +44,42 @@ export function createGameboard() {
             .setCoordinates(coordinatesArr);
     };
 
+    const receiveAttack = (coordinate) => {
+        if (!gameboardChecks.coordsInRange([coordinate])) {
+            throw new RangeError(
+                "Coordinate must have one letter (A-J) and one number (1-10)",
+            );
+        }
+        if (gameboardChecks.duplicateAttack(coordinate, gbState)) {
+            throw new Error("Coordinate has already been attacked.");
         }
 
+        for (const ship of gbState.shipsArr) {
+            if (ship.getCoordinates().includes(coordinate)) {
+                ship.hit(coordinate);
+                return;
+            }
+        }
+        gbState.missedAtks.push(coordinate);
     };
 
-    return { initShips, setCoordinatesOf };
+    const getHitCoords = () => {
+        const hitCoords = [];
+        gbState.shipsArr.forEach((ship) => {
+            ship.getHits().forEach((coord) => hitCoords.push(coord));
+        });
+        return hitCoords;
+    };
+
+    const getMisses = () => {
+        return gbState.missedAtks;
+    };
+
+    return {
+        initShips,
+        setCoordinatesOf,
+        receiveAttack,
+        getHitCoords,
+        getMisses,
+    };
 }

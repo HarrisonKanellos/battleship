@@ -3,11 +3,9 @@ const shipNameExists = (shipName, gbState) => {
 };
 
 const validCoordsArrLength = (shipName, coordsLength, gbState) => {
-        const ship = gbState.shipsArr.find(
-            (ship) => ship.getName() === shipName,
-        );
-        return ship.getLength() === coordsLength;
-    };
+    const ship = gbState.shipsArr.find((ship) => ship.getName() === shipName);
+    return ship.getLength() === coordsLength;
+};
 
 const coordsInRange = (coordinatesArr) => {
     const splitCoordsArr = splitCoords(coordinatesArr);
@@ -110,9 +108,25 @@ const splitCoords = (coordinatesArr) => {
     return splitCoords;
 };
 
+const duplicateAttack = (coordinate, gbState) => {
+    // Coordinate of ship has already been attacked
+    for (const ship of gbState.shipsArr) {
+        if (ship.getHits().includes(coordinate)) {
+            return true;
+        }
+    }
+
+    if (gbState.missedAtks.includes(coordinate)) {
+        return true;
+    }
+
+    return false;
+};
+
 export {
     shipNameExists,
     validCoordsArrLength,
     coordsInRange,
     coordsInLine,
-}
+    duplicateAttack,
+};
