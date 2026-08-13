@@ -1,24 +1,37 @@
 export function createShip(name, length) {
     const coordinates = [];
-    const hits = [];
 
     const getName = () => name;
 
     const getLength = () => length;
 
-    const getCoordinates = () => coordinates;
+    const getCoordinates = () => coordinates.map((coord) => coord.point);
 
-    const getHits = () => hits;
+    const getHits = () => {
+        return coordinates
+            .filter((coord) => coord.hit)
+            .map((coord) => coord.point);
+    };
 
     const setCoordinates = (newCoordinates) => {
-        for (let i = 0; i < newCoordinates.length; i++) {
-            coordinates[i] = newCoordinates[i];
+        for (coord of newCoordinates) {
+            coordinates.push({
+                point: coord,
+                hit: false,
+            });
         }
     };
 
-    const hit = (coordinate) => hits.push(coordinate);
+    const hit = (coordinate) => {
+        for (coord of coordinates) {
+            if (coord.point === coordinate) {
+                coord.hit = true;
+                return;
+            }
+        }
+    };
 
-    const isSunk = () => hits.length === length;
+    const isSunk = () => coordinates.every((coord) => coord.hit);
 
     return {
         getName,
