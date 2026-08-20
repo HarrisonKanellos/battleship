@@ -16,9 +16,9 @@ export function createShip(name, length) {
     const setCoordinates = (newCoordinates) => {
         for (let i = 0; i < length; i++) {
             coordinates[i] = {
-                point: newCoordinates.at(i),
+                point: newCoordinates[i],
                 hit: false,
-            }
+            };
         }
     };
 

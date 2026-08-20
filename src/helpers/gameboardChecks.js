@@ -108,6 +108,19 @@ const splitCoordinates = (coordinatesArr) => {
     return splitCoordinates;
 };
 
+const coordinatesOccupied = (coordinatesArr, gbState) => {
+    for (const ship of gbState.shipsArr) {
+        const isOccupied = ship
+            .getCoordinates()
+            .some((coordinate) => coordinatesArr.includes(coordinate));
+
+        if (isOccupied) {
+            return true;
+        }
+    }
+    return false;
+};
+
 const duplicateAttack = (coordinate, gbState) => {
     // Coordinate of ship has already been attacked
     for (const ship of gbState.shipsArr) {

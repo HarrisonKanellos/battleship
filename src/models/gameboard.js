@@ -38,6 +38,9 @@ export function createGameboard() {
         if (!gameboardChecks.coordinatesInLine(coordinatesArr)) {
             throw new Error("Coordinates must be in straight line.");
         }
+        if (gameboardChecks.coordinatesOccupied(coordinatesArr, gbState)) {
+            throw new Error("Coordinates are occupied by another ship.");
+        }
 
         gbState.shipsArr
             .find((ship) => ship.getName() === shipName)
@@ -66,7 +69,9 @@ export function createGameboard() {
     const getHitCoordinates = () => {
         const hitCoordinates = [];
         gbState.shipsArr.forEach((ship) => {
-            ship.getHits().forEach((coordinate) => hitCoordinates.push(coordinate));
+            ship.getHits().forEach((coordinate) =>
+                hitCoordinates.push(coordinate),
+            );
         });
         return hitCoordinates;
     };
@@ -75,11 +80,16 @@ export function createGameboard() {
         return gbState.missedAtks;
     };
 
+    const allSunk = () => {
+        return gbState.shipsArr.every((ship) => ship.isSunk());
+    };
+
     return {
         initShips,
         setCoordinatesOf,
         receiveAttack,
         getHitCoordinates,
         getMisses,
+        allSunk,
     };
 }
