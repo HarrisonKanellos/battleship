@@ -1,7 +1,11 @@
 import { createGameboard } from "../models/gameboard.js";
 
-const gameboard = createGameboard();
-gameboard.initShips();
+let gameboard;
+
+beforeEach(() => {
+    gameboard = createGameboard();
+    gameboard.initShips();
+});
 
 describe("set coordinates of ship rejects invalid arguments", () => {
     test("doesn't accept unknown ship name", () => {
@@ -86,6 +90,32 @@ describe("set coordinates of ship rejects invalid arguments", () => {
             gameboard.setCoordinatesOf(ship.name, ship.coordinates);
         }).toThrow(error);
     });
+
+    test("prevents setting coordinates if another ship occupies them", () => {
+        gameboard.setCoordinatesOf("patrol boat", ["A2", "A3"]);
+        const battleship = {
+            name: "battleship",
+            coordinates: ["A3", "A4", "A5", "A6"],
+        }
+        const error = new Error("Coordinates are occupied by another ship.");
+
+        expect(() => {
+            gameboard.setCoordinatesOf(battleship.name, battleship.coordinates);
+        }).toThrow(error);
+    });
+
+    test("prevents setting coordinates occupied by another ship", () => {
+        gameboard.setCoordinatesOf("patrol boat", ["E8", "E9"]);
+        const battleship = {
+            name: "battleship",
+            coordinates: ["D8", "E8", "F8", "G8"],
+        }
+        const error = new Error("Coordinates are occupied by another ship.");
+
+        expect(() => {
+            gameboard.setCoordinatesOf(battleship.name, battleship.coordinates);
+        }).toThrow(error);
+    });
 });
 
 describe("receiving invalid attacks", () => {
@@ -118,17 +148,58 @@ describe("receiving invalid attacks", () => {
 });
 
 describe("receiving valid attacks", () => {
-    gameboard.setCoordinatesOf("destroyer", ["H6", "H7", "H8"]);
+    beforeEach(() => {
+        gameboard.setCoordinatesOf("destroyer", ["H6", "H7", "H8"]);
+    });
 
     test("attacking a ship registers as hit", () => {
         gameboard.receiveAttack("H7");
-        expect(gameboard.getHitCoords()).toContain("H7");
+        expect(gameboard.getHitCoordinates()).toContain("H7");
         expect(gameboard.getMisses()).not.toContain("H7");
     });
 
     test("missed attack doesn't register as hit", () => {
         gameboard.receiveAttack("B3");
-        expect(gameboard.getHitCoords()).not.toContain("B3");
+        expect(gameboard.getHitCoordinates()).not.toContain("B3");
         expect(gameboard.getMisses()).toContain("B3");
+    });
+});
+
+describe("checking all ships sunk", () => {
+    beforeEach(() => {
+        gameboard.setCoordinatesOf("carrier", ["B2", "B3", "B4", "B5", "B6"]);
+        gameboard.setCoordinatesOf("battleship", ["E7", "F7", "G7", "H7"]);
+        gameboard.setCoordinatesOf("destroyer", ["C4", "C5", "C6"]);
+        gameboard.setCoordinatesOf("submarine", ["F8", "F9", "F10"]);
+        gameboard.setCoordinatesOf("patrol boat", ["G9", "H9"]);
+    });
+
+    test("returns false when no ships sunk", () => {
+        expect(gameboard.allSunk()).toBe(false);
+    });
+
+    test("returns false when some ships sunk", () => {
+        const battleshipCoordinates = ["E7", "F7", "G7", "H7"];
+        const submarineCoordinates = ["F8", "F9", "F10"];
+        const otherCoordinates = ["G9", "A9", "C5", "B3", "B6"];
+
+        battleshipCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
+        submarineCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
+        otherCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
+
+        expect(gameboard.allSunk()).toBe(false);
+    });
+
+    test("returns true when all ships sunk", () => {
+        const allShipCoordinates = [
+            "B2", "B3", "B4", "B5", "B6", 
+            "E7", "F7", "G7", "H7",
+            "C4", "C5", "C6", 
+            "F8", "F9", "F10", 
+            "G9", "H9"
+        ];
+        allShipCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
+        
+        expect(gameboard.allSunk()).toBe(true);
     });
 });
