@@ -20,7 +20,7 @@ export function createGameboard() {
             throw new Error("Ship name must exist in ships array.");
         }
         if (
-            !gameboardChecks.validCoordsArrLength(
+            !gameboardChecks.validCoordinatesArrLength(
                 shipName,
                 coordinatesArr.length,
                 gbState,
@@ -30,12 +30,12 @@ export function createGameboard() {
                 "Length of coordinates array must be equal to length of ship.",
             );
         }
-        if (!gameboardChecks.coordsInRange(coordinatesArr)) {
+        if (!gameboardChecks.coordinatesInRange(coordinatesArr)) {
             throw new RangeError(
                 "Coordinate must have one letter (A-J) and one number (1-10)",
             );
         }
-        if (!gameboardChecks.coordsInLine(coordinatesArr)) {
+        if (!gameboardChecks.coordinatesInLine(coordinatesArr)) {
             throw new Error("Coordinates must be in straight line.");
         }
 
@@ -45,7 +45,7 @@ export function createGameboard() {
     };
 
     const receiveAttack = (coordinate) => {
-        if (!gameboardChecks.coordsInRange([coordinate])) {
+        if (!gameboardChecks.coordinatesInRange([coordinate])) {
             throw new RangeError(
                 "Coordinate must have one letter (A-J) and one number (1-10)",
             );
@@ -63,12 +63,12 @@ export function createGameboard() {
         gbState.missedAtks.push(coordinate);
     };
 
-    const getHitCoords = () => {
-        const hitCoords = [];
+    const getHitCoordinates = () => {
+        const hitCoordinates = [];
         gbState.shipsArr.forEach((ship) => {
-            ship.getHits().forEach((coord) => hitCoords.push(coord));
+            ship.getHits().forEach((coordinate) => hitCoordinates.push(coordinate));
         });
-        return hitCoords;
+        return hitCoordinates;
     };
 
     const getMisses = () => {
@@ -79,7 +79,7 @@ export function createGameboard() {
         initShips,
         setCoordinatesOf,
         receiveAttack,
-        getHitCoords,
+        getHitCoordinates,
         getMisses,
     };
 }

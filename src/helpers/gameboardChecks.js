@@ -2,42 +2,42 @@ const shipNameExists = (shipName, gbState) => {
     return gbState.shipsArr.some((ship) => ship.getName() === shipName);
 };
 
-const validCoordsArrLength = (shipName, coordsLength, gbState) => {
+const validCoordinatesArrLength = (shipName, coordinatesLength, gbState) => {
     const ship = gbState.shipsArr.find((ship) => ship.getName() === shipName);
-    return ship.getLength() === coordsLength;
+    return ship.getLength() === coordinatesLength;
 };
 
-const coordsInRange = (coordinatesArr) => {
-    const splitCoordsArr = splitCoords(coordinatesArr);
+const coordinatesInRange = (coordinatesArr) => {
+    const splitCoordinatesArr = splitCoordinates(coordinatesArr);
 
-    for (const coord of splitCoordsArr) {
-        if (coord.letter.length !== 1) {
+    for (const coordinate of splitCoordinatesArr) {
+        if (coordinate.letter.length !== 1) {
             return false;
         }
         if (
-            coord.letter.charCodeAt(0) < 65 ||
-            coord.letter.charCodeAt(0) > 74
+            coordinate.letter.charCodeAt(0) < 65 ||
+            coordinate.letter.charCodeAt(0) > 74
         ) {
             return false;
         }
-        if (Number.isNaN(coord.number)) {
+        if (Number.isNaN(coordinate.number)) {
             return false;
         }
-        if (coord.number < 1 || coord.number > 10) {
+        if (coordinate.number < 1 || coordinate.number > 10) {
             return false;
         }
     }
     return true;
 };
 
-const coordsInLine = (coordinatesArr) => {
-    const splitCoordsArr = splitCoords(coordinatesArr);
+const coordinatesInLine = (coordinatesArr) => {
+    const splitCoordinatesArr = splitCoordinates(coordinatesArr);
 
     let direction;
-    const letCode1 = splitCoordsArr[0].letter.charCodeAt(0);
-    const letCode2 = splitCoordsArr[1].letter.charCodeAt(0);
-    const num1 = splitCoordsArr[0].number;
-    const num2 = splitCoordsArr[1].number;
+    const letCode1 = splitCoordinatesArr[0].letter.charCodeAt(0);
+    const letCode2 = splitCoordinatesArr[1].letter.charCodeAt(0);
+    const num1 = splitCoordinatesArr[0].number;
+    const num2 = splitCoordinatesArr[1].number;
     if (letCode1 - letCode2 === -1 && num1 - num2 === 0) {
         direction = "left-right";
     } else if (letCode1 - letCode2 === 1 && num1 - num2 === 0) {
@@ -50,11 +50,11 @@ const coordsInLine = (coordinatesArr) => {
         return false;
     }
 
-    for (let i = 1; i < splitCoordsArr.length - 1; i++) {
-        const letCodeCurr = splitCoordsArr[i].letter.charCodeAt(0);
-        const letCodeNext = splitCoordsArr[i + 1].letter.charCodeAt(0);
-        const numCurr = splitCoordsArr[i].number;
-        const numNext = splitCoordsArr[i + 1].number;
+    for (let i = 1; i < splitCoordinatesArr.length - 1; i++) {
+        const letCodeCurr = splitCoordinatesArr[i].letter.charCodeAt(0);
+        const letCodeNext = splitCoordinatesArr[i + 1].letter.charCodeAt(0);
+        const numCurr = splitCoordinatesArr[i].number;
+        const numNext = splitCoordinatesArr[i + 1].number;
 
         switch (direction) {
             case "left-right":
@@ -93,19 +93,19 @@ const coordsInLine = (coordinatesArr) => {
     return true;
 };
 
-const splitCoords = (coordinatesArr) => {
-    const splitCoords = [];
+const splitCoordinates = (coordinatesArr) => {
+    const splitCoordinates = [];
     const nonDigitChars = /\D/g;
     const digits = /\d/g;
 
-    coordinatesArr.forEach((coord) => {
-        const letter = coord.match(nonDigitChars).join("");
-        const number = Number(coord.match(digits).join(""));
+    coordinatesArr.forEach((coordinate) => {
+        const letter = coordinate.match(nonDigitChars).join("");
+        const number = Number(coordinate.match(digits).join(""));
 
-        splitCoords.push({ letter, number });
+        splitCoordinates.push({ letter, number });
     });
 
-    return splitCoords;
+    return splitCoordinates;
 };
 
 const duplicateAttack = (coordinate, gbState) => {
@@ -125,8 +125,9 @@ const duplicateAttack = (coordinate, gbState) => {
 
 export {
     shipNameExists,
-    validCoordsArrLength,
-    coordsInRange,
-    coordsInLine,
+    validCoordinatesArrLength,
+    coordinatesInRange,
+    coordinatesInLine,
+    coordinatesOccupied,
     duplicateAttack,
 };

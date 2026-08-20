@@ -14,11 +14,11 @@ export function createShip(name, length) {
     };
 
     const setCoordinates = (newCoordinates) => {
-        for (coord of newCoordinates) {
-            coordinates.push({
-                point: coord,
+        for (let i = 0; i < length; i++) {
+            coordinates[i] = {
+                point: newCoordinates.at(i),
                 hit: false,
-            });
+            }
         }
     };
 
