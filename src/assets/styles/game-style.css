@@ -1,0 +1,50 @@
+*, *::before, *::after {
+    box-sizing: border-box;     
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100vh;
+}
+
+header {
+    height: 10vh;
+}
+
+main {
+    height: 90vh;
+    width: 100vw;
+}
+
+.display-wrapper {
+    height: 100%;
+}
+
+.game-scene-wrapper {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 2fr 5fr 5fr 2fr;
+    column-gap: 100px;
+
+    margin: 0 auto;
+    width: 90%;
+}
+
+.gameboard-wrapper {
+    aspect-ratio: 1 / 1;
+}
+
+.gameboard {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+
+    height: 100%;
+
+    border: 5px solid black;
+}
+
+.gameboard [class^="cell"] {
+    border: 2px solid black;
+}
