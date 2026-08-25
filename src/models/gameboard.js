@@ -3,16 +3,16 @@ import * as gameboardChecks from "../helpers/gameboardChecks.js";
 
 export function createGameboard() {
     const gbState = {
-        shipsArr: [],
-        missedAtks: [],
+        ships: [],
+        missedAttacks: [],
     };
 
     const initShips = () => {
-        gbState.shipsArr.push(createShip("carrier", 5));
-        gbState.shipsArr.push(createShip("battleship", 4));
-        gbState.shipsArr.push(createShip("destroyer", 3));
-        gbState.shipsArr.push(createShip("submarine", 3));
-        gbState.shipsArr.push(createShip("patrol boat", 2));
+        gbState.ships.push(createShip("carrier", 5));
+        gbState.ships.push(createShip("battleship", 4));
+        gbState.ships.push(createShip("destroyer", 3));
+        gbState.ships.push(createShip("submarine", 3));
+        gbState.ships.push(createShip("patrol boat", 2));
     };
 
     const setCoordinatesOf = (shipName, coordinatesArr) => {
@@ -42,7 +42,7 @@ export function createGameboard() {
             throw new Error("Coordinates are occupied by another ship.");
         }
 
-        gbState.shipsArr
+        gbState.ships
             .find((ship) => ship.getName() === shipName)
             .setCoordinates(coordinatesArr);
     };
@@ -57,18 +57,18 @@ export function createGameboard() {
             throw new Error("Coordinate has already been attacked.");
         }
 
-        for (const ship of gbState.shipsArr) {
+        for (const ship of gbState.ships) {
             if (ship.getCoordinates().includes(coordinate)) {
                 ship.hit(coordinate);
                 return;
             }
         }
-        gbState.missedAtks.push(coordinate);
+        gbState.missedAttacks.push(coordinate);
     };
 
     const getHitCoordinates = () => {
         const hitCoordinates = [];
-        gbState.shipsArr.forEach((ship) => {
+        gbState.ships.forEach((ship) => {
             ship.getHits().forEach((coordinate) =>
                 hitCoordinates.push(coordinate),
             );
@@ -77,11 +77,22 @@ export function createGameboard() {
     };
 
     const getMisses = () => {
-        return gbState.missedAtks;
+        return gbState.missedAttacks;
     };
 
     const allSunk = () => {
-        return gbState.shipsArr.every((ship) => ship.isSunk());
+        return gbState.ships.every((ship) => ship.isSunk());
+    };
+
+    const getShipPositions = () => {
+        const positions = {};
+        for (const ship of gbState.ships) {
+            const coordinates = ship.getCoordinates();
+            const orientation = ship.getOrientation();
+
+            positions[ship.getName()] = { coordinates, orientation };
+        }
+        return positions;
     };
 
     return {
@@ -91,5 +102,6 @@ export function createGameboard() {
         getHitCoordinates,
         getMisses,
         allSunk,
+        getShipPositions,
     };
 }

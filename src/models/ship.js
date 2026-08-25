@@ -33,7 +33,7 @@ export function createShip(name, length) {
     };
 
     const hit = (coordinate) => {
-        for (coord of coordinates) {
+        for (const coord of coordinates) {
             if (coord.point === coordinate) {
                 coord.hit = true;
                 return;
