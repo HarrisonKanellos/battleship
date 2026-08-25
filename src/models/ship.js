@@ -7,6 +7,16 @@ export function createShip(name, length) {
 
     const getCoordinates = () => coordinates.map((coord) => coord.point);
 
+    const getOrientation = () => {
+        const firstCoordinateNum = coordinates[0].point.split("")[1];
+        const secondCoordinateNum = coordinates[1].point.split("")[1];
+        if (firstCoordinateNum === secondCoordinateNum) {
+            return "horizontal";
+        } else {
+            return "vertical";
+        }
+    };
+
     const getHits = () => {
         return coordinates
             .filter((coord) => coord.hit)
@@ -37,6 +47,7 @@ export function createShip(name, length) {
         getName,
         getLength,
         getCoordinates,
+        getOrientation,
         setCoordinates,
         hit,
         getHits,
