@@ -41,10 +41,55 @@ main {
     grid-template-rows: repeat(10, 1fr);
 
     height: 100%;
+    min-width: 280px;
 
     border: 5px solid black;
 }
 
 .gameboard [class^="cell"] {
-    border: 2px solid black;
+    --cell-border-width: 2px;
+
+    min-height: 0; /* Prevents grid cells with ships expanding */
+    border: var(--cell-border-width) solid black;
+}
+
+.ship-image {
+    --carrier-length: 5;
+    --battleship-length: 4;
+    --destroyer-length: 3;
+    --submarine-length: 3;
+    --patrol-boat-length: 2;
+}
+
+/* All ship lengths */
+.carrier-image {
+    width: calc(100% * var(--carrier-length) + (var(--carrier-length) - 1) * var(--cell-border-width) * 2);
+}
+.battleship-image {
+    width: calc(100% * var(--battleship-length) + (var(--battleship-length) - 1) * var(--cell-border-width) * 2);
+}
+.destroyer-image {
+    width: calc(100% * var(--destroyer-length) + (var(--destroyer-length) - 1) * var(--cell-border-width) * 2);
+}
+.submarine-image {
+    width: calc(100% * var(--submarine-length) + (var(--submarine-length) - 1) * var(--cell-border-width) * 2);
+}
+.patrol-boat-image {
+    width: calc(100% * var(--patrol-boat-length) + (var(--patrol-boat-length) - 1) * var(--cell-border-width) * 2);
+}
+
+/* Vertical ships */
+.vertical-image {
+    transform-origin: top left;
+    transform: rotate(90deg) translateY(-100%);
+}
+
+/* Hit attack on players gameboard cell */
+.player-gameboard .hit-attack  {
+    background-color: rgba(255, 0, 0, 0.6);
+}
+
+/* Missed attack on players gameboard cell */
+.player-gameboard .missed-attack {
+    background-color: rgba(0, 0, 0, 0.2);
 }

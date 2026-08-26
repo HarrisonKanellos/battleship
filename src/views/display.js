@@ -1,3 +1,19 @@
+import { formatClassName } from "../helpers/displayHelpers.js";
+
+import carrierImage from "../assets/images/carrier.svg";
+import battleshipImage from "../assets/images/battleship.svg";
+import destroyerImage from "../assets/images/destroyer.svg";
+import submarineImage from "../assets/images/submarine.svg";
+import patrolBoatImage from "../assets/images/patrol-boat.svg";
+
+const shipImages = {
+    carrier: carrierImage,
+    battleship: battleshipImage,
+    destroyer: destroyerImage,
+    submarine: submarineImage,
+    "patrol boat": patrolBoatImage,
+};
+
 const renderGameScene = () => {
     renderGameContainers();
 
@@ -83,4 +99,40 @@ const renderGameboardCells = (gameboard) => {
     }
 };
 
-export { renderGameScene };
+const renderPlayerGameboard = (
+    gameboard,
+    shipPositions,
+    hitCoordinates,
+    missedAttacks,
+) => {
+    // Display ships
+    for (const ship in shipPositions) {
+        const firstCoordinate = shipPositions[ship].coordinates[0];
+        const firstCoordinateCell = gameboard.querySelector(`.cell-${firstCoordinate}`);
+
+        const shipImage = document.createElement("img");
+        shipImage.src = shipImages[ship];
+
+        const formattedShipName = formatClassName(ship);
+        shipImage.classList.add("ship-image", `${formattedShipName}-image`);
+        if (shipPositions[ship].orientation === "vertical") {
+            shipImage.classList.add("vertical-image");
+        }
+
+        firstCoordinateCell.appendChild(shipImage);
+    }
+
+    // Display hits
+    for (const coordinate of hitCoordinates) {
+        const coordinateCell = gameboard.querySelector(`.cell-${coordinate}`);
+        coordinateCell.classList.add("hit-attack");
+    }
+
+    // Display misses
+    for (const coordinate of missedAttacks) {
+        const coordinateCell = gameboard.querySelector(`.cell-${coordinate}`);
+        coordinateCell.classList.add("missed-attack");
+    }
+};
+
+export { renderGameScene, renderPlayerGameboard };

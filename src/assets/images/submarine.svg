@@ -1,0 +1,17 @@
+<svg width="360" height="120" viewBox="0 4 100 36" xmlns="http://www.w3.org/2000/svg">
+    <g class="silhouette" stroke-width="0.5">
+        <!-- Sleek Teardrop Hull shape -->
+        <path d="M 6,22 C 14,16 76,16 91,20 C 100,22 102,23 102,24 C 102,25 100,26 91,28 C 76,32 14,32 6,26 C 2,24 2,24 6,22 Z" />
+        
+        <polygon points="62,17.5 67,8 75,8 77,18" />
+        
+        <line x1="69" y1="8" x2="69" y2="2" stroke-width="0.8"/>
+        <line x1="71" y1="8" x2="71" y2="4" stroke-width="1.2"/>
+        <line x1="73" y1="8" x2="73" y2="5" stroke-width="0.6"/>
+        
+        <ellipse cx="92" cy="19.5" rx="3" ry="1" />
+        
+        <polygon points="92,21 95,14 97,14 96,21" />
+        <polygon points="92,27 95,34 97,34 96,27" />
+    </g>
+</svg>

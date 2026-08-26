@@ -1,0 +1,23 @@
+<svg width="360" height="120" viewBox="0 0 100 28" xmlns="http://www.w3.org/2000/svg">
+    <g class="silhouette" stroke-width="0.5">
+        <!-- Hull -->
+        <polygon points="6,26 18,17 96,17 94,26" />
+        <!-- Main Gun (Angled Stealth Casing) -->
+        <polygon points="22,17 25,14 30,14 32,17" />
+        <line x1="16" y1="14.5" x2="25" y2="14.5" stroke-width="1"/>
+        <!-- CIWS Forward -->
+        <polygon points="32,17 33,15 35,15 36,17" />
+        <!-- Main Superstructure / Bridge -->
+        <polygon points="35,17 41,6 50,6 54,17" />
+        <!-- Main Mast (Integrated faceted stealth structure) -->
+        <polygon points="43,6 45,1 47,1 48,6" />
+        <line x1="46" y1="1" x2="46" y2="0" stroke-width="0.8"/>
+        <!-- Aft Superstructure (Helicopter Hangar) -->
+        <polygon points="56,17 59,8 67,8 70,17" />
+        <!-- Aft Radar Array/Mast -->
+        <polygon points="61,8 63,3 65,3 65,8" />
+        <circle cx="64" cy="2" r="1.5" />
+        <!-- VLS Decks / Helipad area profile -->
+        <rect x="72" y="16" width="10" height="1" />
+    </g>
+</svg>

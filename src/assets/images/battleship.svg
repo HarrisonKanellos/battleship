@@ -1,0 +1,31 @@
+<svg width="480" height="120" viewBox="12 0 100 30" xmlns="http://www.w3.org/2000/svg">
+    <g class="silhouette" stroke-width="0.5">
+        <!-- Sleek modernized hull -->
+        <polygon points="5,26 15,18 120,18 116,26" />
+        <!-- Main Turret 1 -->
+        <polygon points="25,18 25,15 31,15 31,18" />
+        <line x1="15" y1="15.8" x2="25" y2="16.8" stroke-width="1.2"/>
+        <!-- Main Turret 2 - Superfiring -->
+        <polygon points="32,18 32,12 38,12 38,18" />
+        <line x1="22" y1="12.8" x2="32" y2="12.8" stroke-width="1.2"/>
+        <!-- Main Bridge / Command Tower -->
+        <polygon points="47,18 52,4 58,4 60,18" />
+        <line x1="55" y1="4" x2="55" y2="0" stroke-width="1"/>
+        <rect x="52" y="2" width="6" height="3" />
+        <!-- Modern Funnels -->
+        <polygon points="66,18 68,8 72,8 73,18" />
+        <line x1="70" y1="8" x2="70" y2="4" stroke-width="0.8"/>
+        <polygon points="79,18 81,8 85,8 86,18" />
+        <line x1="83" y1="8" x2="83" y2="5" stroke-width="0.8"/>
+        <!-- Aft Tower / Radar suite -->
+        <polygon points="93,18 95,6 99,6 101,18" />
+        <line x1="97" y1="6" x2="97" y2="2" stroke-width="0.8"/>
+        <!-- Aft Turret -->
+        <polygon points="108,18 108,14 114,14 114,18" />
+        <line x1="114" y1="14.8" x2="124" y2="14.8" stroke-width="1.2"/>
+        <!-- Secondary Batteries/VLS silos on sides -->
+        <rect x="53" y="16" width="3" height="2" />
+        <rect x="69" y="16" width="3" height="2" />
+        <rect x="96" y="16" width="3" height="2" />
+    </g>
+</svg>
