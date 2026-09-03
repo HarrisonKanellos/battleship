@@ -1,5 +1,12 @@
 import { createShip } from "./ship.js";
-import * as gameboardChecks from "../helpers/gameboardChecks.js";
+import {
+    shipNameExists,
+    validCoordinatesArrLength,
+    coordinatesInRange,
+    coordinatesInLine,
+    coordinatesOccupied,
+    duplicateAttack,
+} from "../helpers/gameboardChecks.js";
 
 export function createGameboard() {
     const gbState = {
@@ -16,29 +23,25 @@ export function createGameboard() {
     };
 
     const setCoordinatesOf = (shipName, coordinatesArr) => {
-        if (!gameboardChecks.shipNameExists(shipName, gbState)) {
+        if (!shipNameExists(shipName, gbState)) {
             throw new Error("Ship name must exist in ships array.");
         }
         if (
-            !gameboardChecks.validCoordinatesArrLength(
-                shipName,
-                coordinatesArr.length,
-                gbState,
-            )
+            !validCoordinatesArrLength(shipName, coordinatesArr.length, gbState)
         ) {
             throw new Error(
                 "Length of coordinates array must be equal to length of ship.",
             );
         }
-        if (!gameboardChecks.coordinatesInRange(coordinatesArr)) {
+        if (!coordinatesInRange(coordinatesArr)) {
             throw new RangeError(
                 "Coordinate must have one letter (A-J) and one number (1-10)",
             );
         }
-        if (!gameboardChecks.coordinatesInLine(coordinatesArr)) {
+        if (!coordinatesInLine(coordinatesArr)) {
             throw new Error("Coordinates must be in straight line.");
         }
-        if (gameboardChecks.coordinatesOccupied(coordinatesArr, gbState)) {
+        if (coordinatesOccupied(coordinatesArr, gbState)) {
             throw new Error("Coordinates are occupied by another ship.");
         }
 
@@ -48,12 +51,12 @@ export function createGameboard() {
     };
 
     const receiveAttack = (coordinate) => {
-        if (!gameboardChecks.coordinatesInRange([coordinate])) {
+        if (!coordinatesInRange([coordinate])) {
             throw new RangeError(
                 "Coordinate must have one letter (A-J) and one number (1-10)",
             );
         }
-        if (gameboardChecks.duplicateAttack(coordinate, gbState)) {
+        if (duplicateAttack(coordinate, gbState)) {
             throw new Error("Coordinate has already been attacked.");
         }
 

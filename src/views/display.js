@@ -1,4 +1,4 @@
-import { formatClassName } from "../helpers/displayHelpers.js";
+import { formatClassName, capitalizeName } from "../helpers/displayHelpers.js";
 
 import carrierImage from "../assets/images/carrier.svg";
 import battleshipImage from "../assets/images/battleship.svg";
@@ -14,65 +14,33 @@ const shipImages = {
     "patrol boat": patrolBoatImage,
 };
 
-const renderGameScene = () => {
-    renderGameContainers();
+const renderPlaceShipsScene = () => {
+    const displayWrapper = document.querySelector(".display-wrapper");
 
-    const enemyGameboard = document.querySelector(".enemy-gameboard");
-    const playerGameboard = document.querySelector(".player-gameboard");
-    renderGameboardCells(enemyGameboard);
-    renderGameboardCells(playerGameboard);
+    const placeShipsSceneWrapper = document.createElement("div");
+    placeShipsSceneWrapper.classList.add("place-ships-scene-wrapper");
+
+    const gameboardWrapper = renderGameboard("player");
+    const shipsWrapper = renderDraggableShips();
+    const buttonsWrapper = renderPlaceShipsButtons();
+
+    placeShipsSceneWrapper.appendChild(gameboardWrapper);
+    placeShipsSceneWrapper.appendChild(shipsWrapper);
+    placeShipsSceneWrapper.appendChild(buttonsWrapper);
+
+    displayWrapper.appendChild(placeShipsSceneWrapper);
 };
 
-const renderGameContainers = () => {
-    const displayWrapper = document.createElement("div");
+const renderGameScene = () => {
+    const displayWrapper = document.querySelector(".display-wrapper");
+
     const gameSceneWrapper = document.createElement("div");
-    displayWrapper.classList.add("display-wrapper");
     gameSceneWrapper.classList.add("game-scene-wrapper");
 
-    const enemyShipsWrapper = document.createElement("div");
-    const enemyShipsHeading = document.createElement("h2");
-    const enemyShipsContainer = document.createElement("div");
-    enemyShipsWrapper.classList.add("ships-wrapper", "enemy-ships-wrapper");
-    enemyShipsHeading.classList.add("ships-heading", "enemy-ships-heading");
-    enemyShipsContainer.classList.add(
-        "ships-container",
-        "enemy-ships-conatiner",
-    );
-
-    const enemyGameboardWrapper = document.createElement("div");
-    const enemyGameboard = document.createElement("div");
-    enemyGameboardWrapper.classList.add(
-        "gameboard-wrapper",
-        "enemy-gameboard-wrapper",
-    );
-    enemyGameboard.classList.add("gameboard", "enemy-gameboard");
-
-    const playerGameboardWrapper = document.createElement("div");
-    const playerGameboard = document.createElement("div");
-    playerGameboardWrapper.classList.add(
-        "gameboard-wrapper",
-        "player-gameboard-wrapper",
-    );
-    playerGameboard.classList.add("gameboard", "player-gameboard");
-
-    const playerShipsWrapper = document.createElement("div");
-    const playerShipsHeading = document.createElement("h2");
-    const playerShipsContainer = document.createElement("div");
-    playerShipsWrapper.classList.add("ships-wrapper", "player-ships-wrapper");
-    playerShipsHeading.classList.add("ships-heading", "player-ships-heading");
-    playerShipsContainer.classList.add(
-        "ships-container",
-        "player-ships-conatiner",
-    );
-
-    enemyShipsWrapper.appendChild(enemyShipsHeading);
-    enemyShipsWrapper.appendChild(enemyShipsContainer);
-
-    enemyGameboardWrapper.appendChild(enemyGameboard);
-    playerGameboardWrapper.appendChild(playerGameboard);
-
-    playerShipsWrapper.appendChild(playerShipsHeading);
-    playerShipsWrapper.appendChild(playerShipsContainer);
+    const enemyShipsWrapper = renderShipsList("enemy");
+    const enemyGameboardWrapper = renderGameboard("enemy");
+    const playerGameboardWrapper = renderGameboard("player");
+    const playerShipsWrapper = renderShipsList("player");
 
     gameSceneWrapper.appendChild(enemyShipsWrapper);
     gameSceneWrapper.appendChild(enemyGameboardWrapper);
@@ -80,9 +48,100 @@ const renderGameContainers = () => {
     gameSceneWrapper.appendChild(playerShipsWrapper);
 
     displayWrapper.appendChild(gameSceneWrapper);
+};
 
-    const main = document.querySelector("main");
-    main.appendChild(displayWrapper);
+const renderDraggableShips = () => {
+    const shipsWrapper = document.createElement("div");
+    shipsWrapper.classList.add("ships-list-wrapper", "draggable-ships-wrapper");
+
+    const shipsHeading = document.createElement("h2");
+    shipsHeading.classList.add("ships-heading");
+    shipsHeading.textContent = "Chart Your Fleet";
+
+    const shipsContainer = document.createElement("div");
+    shipsContainer.classList.add("ships-container");
+
+    // Ship images and captions
+    for (const ship in shipImages) {
+        const shipWrapper = document.createElement("figure");
+        shipWrapper.classList.add("ship-wrapper");
+
+        const shipImage = document.createElement("img");
+        shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`);
+        shipImage.src = shipImages[ship];
+        shipImage.draggable = true;
+
+        const shipCaption = document.createElement("figcaption");
+        shipCaption.textContent = capitalizeName(ship);
+
+        shipWrapper.appendChild(shipImage);
+        shipWrapper.appendChild(shipCaption);
+
+        shipsContainer.appendChild(shipWrapper);
+    }
+
+    shipsWrapper.appendChild(shipsHeading);
+    shipsWrapper.appendChild(shipsContainer);
+
+    return shipsWrapper;
+};
+
+const renderPlaceShipsButtons = () => {
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("place-ships-buttons-container");
+
+    const resetBoard = document.createElement("button");
+    resetBoard.classList.add("button-reset-board");
+    resetBoard.textContent = "Reset Board";
+
+    const confirmPlacements = document.createElement("button");
+    confirmPlacements.classList.add("button-confirm-placements");
+    confirmPlacements.textContent = "Confirm Placements";
+
+    buttonsContainer.appendChild(resetBoard);
+    buttonsContainer.appendChild(confirmPlacements);
+
+    return buttonsContainer;
+};
+
+const renderShipsList = (playerType) => {
+    const shipsWrapper = document.createElement("div");
+    shipsWrapper.classList.add(
+        "ships-list-wrapper",
+        `${playerType}-ships-wrapper`,
+    );
+
+    const shipsHeading = document.createElement("h2");
+    shipsHeading.classList.add("ships-heading", `${playerType}-ships-heading`);
+
+    const shipsContainer = document.createElement("div");
+    shipsContainer.classList.add(
+        "ships-container",
+        `${playerType}-ships-conatiner`,
+    );
+
+    // Display list of draggable ships
+
+    shipsWrapper.appendChild(shipsHeading);
+    shipsWrapper.appendChild(shipsContainer);
+
+    return shipsWrapper;
+};
+
+const renderGameboard = (playerType) => {
+    const gameboardWrapper = document.createElement("div");
+    gameboardWrapper.classList.add(
+        "gameboard-wrapper",
+        `${playerType}-gameboard-wrapper`,
+    );
+
+    const gameboard = document.createElement("div");
+    gameboard.classList.add("gameboard", `${playerType}-gameboard`);
+
+    renderGameboardCells(gameboard);
+    gameboardWrapper.appendChild(gameboard);
+
+    return gameboardWrapper;
 };
 
 const renderGameboardCells = (gameboard) => {
@@ -108,17 +167,17 @@ const renderPlayerGameboard = (
     // Display ships
     for (const ship in shipPositions) {
         const firstCoordinate = shipPositions[ship].coordinates[0];
-        const firstCoordinateCell = gameboard.querySelector(`.cell-${firstCoordinate}`);
+        const firstCoordinateCell = gameboard.querySelector(
+            `.cell-${firstCoordinate}`,
+        );
 
         const shipImage = document.createElement("img");
-        shipImage.src = shipImages[ship];
-
-        const formattedShipName = formatClassName(ship);
-        shipImage.classList.add("ship-image", `${formattedShipName}-image`);
+        shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`);
         if (shipPositions[ship].orientation === "vertical") {
             shipImage.classList.add("vertical-image");
         }
-
+        shipImage.src = shipImages[ship];
+        
         firstCoordinateCell.appendChild(shipImage);
     }
 
@@ -135,4 +194,4 @@ const renderPlayerGameboard = (
     }
 };
 
-export { renderGameScene, renderPlayerGameboard };
+export { renderPlaceShipsScene, renderGameScene, renderPlayerGameboard };

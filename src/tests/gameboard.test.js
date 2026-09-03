@@ -96,7 +96,7 @@ describe("set coordinates of ship rejects invalid arguments", () => {
         const battleship = {
             name: "battleship",
             coordinates: ["A3", "A4", "A5", "A6"],
-        }
+        };
         const error = new Error("Coordinates are occupied by another ship.");
 
         expect(() => {
@@ -109,7 +109,7 @@ describe("set coordinates of ship rejects invalid arguments", () => {
         const battleship = {
             name: "battleship",
             coordinates: ["D8", "E8", "F8", "G8"],
-        }
+        };
         const error = new Error("Coordinates are occupied by another ship.");
 
         expect(() => {
@@ -183,23 +183,43 @@ describe("checking all ships sunk", () => {
         const submarineCoordinates = ["F8", "F9", "F10"];
         const otherCoordinates = ["G9", "A9", "C5", "B3", "B6"];
 
-        battleshipCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
-        submarineCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
-        otherCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
+        battleshipCoordinates.forEach((coordinate) =>
+            gameboard.receiveAttack(coordinate),
+        );
+        submarineCoordinates.forEach((coordinate) =>
+            gameboard.receiveAttack(coordinate),
+        );
+        otherCoordinates.forEach((coordinate) =>
+            gameboard.receiveAttack(coordinate),
+        );
 
         expect(gameboard.allSunk()).toBe(false);
     });
 
     test("returns true when all ships sunk", () => {
         const allShipCoordinates = [
-            "B2", "B3", "B4", "B5", "B6", 
-            "E7", "F7", "G7", "H7",
-            "C4", "C5", "C6", 
-            "F8", "F9", "F10", 
-            "G9", "H9"
+            "B2",
+            "B3",
+            "B4",
+            "B5",
+            "B6",
+            "E7",
+            "F7",
+            "G7",
+            "H7",
+            "C4",
+            "C5",
+            "C6",
+            "F8",
+            "F9",
+            "F10",
+            "G9",
+            "H9",
         ];
-        allShipCoordinates.forEach(coordinate => gameboard.receiveAttack(coordinate));
-        
+        allShipCoordinates.forEach((coordinate) =>
+            gameboard.receiveAttack(coordinate),
+        );
+
         expect(gameboard.allSunk()).toBe(true);
     });
 });
