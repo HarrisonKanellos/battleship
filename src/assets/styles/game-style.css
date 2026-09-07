@@ -1,10 +1,27 @@
-*, *::before, *::after {
-    box-sizing: border-box;     
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-html, body {
+/* Relative ship lengths */
+.ship-image {
+    --carrier-length: 5;
+    --battleship-length: 4;
+    --destroyer-length: 3;
+    --submarine-length: 3;
+    --patrol-boat-length: 2;
+}
+
+:root {
+    font-size: 16px;
+    font-family: sans-serif;
+}
+
+html,
+body {
     height: 100vh;
 }
 
@@ -21,16 +38,7 @@ main {
     height: 100%;
 }
 
-.game-scene-wrapper {
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 2fr 5fr 5fr 2fr;
-    column-gap: 100px;
-
-    margin: 0 auto;
-    width: 90%;
-}
-
+/* || General Gameboard Styles */
 .gameboard-wrapper {
     aspect-ratio: 1 / 1;
 }
@@ -44,38 +52,45 @@ main {
     min-width: 280px;
 
     border: 5px solid black;
+
+    /* Calculated ship lengths */
+    & .carrier-image {
+        width: calc(
+            100% * var(--carrier-length) + (var(--carrier-length) - 1) *
+                var(--cell-border-width)
+        );
+    }
+    & .battleship-image {
+        width: calc(
+            100% * var(--battleship-length) + (var(--battleship-length) - 1) *
+                var(--cell-border-width)
+        );
+    }
+    & .destroyer-image {
+        width: calc(
+            100% * var(--destroyer-length) + (var(--destroyer-length) - 1) *
+                var(--cell-border-width)
+        );
+    }
+    & .submarine-image {
+        width: calc(
+            100% * var(--submarine-length) + (var(--submarine-length) - 1) *
+                var(--cell-border-width)
+        );
+    }
+    & .patrol-boat-image {
+        width: calc(
+            100% * var(--patrol-boat-length) + (var(--patrol-boat-length) - 1) *
+                var(--cell-border-width)
+        );
+    }
 }
 
 .gameboard [class^="cell"] {
-    --cell-border-width: 2px;
+    --cell-border-width: 1px;
 
     min-height: 0; /* Prevents grid cells with ships expanding */
     border: var(--cell-border-width) solid black;
-}
-
-.ship-image {
-    --carrier-length: 5;
-    --battleship-length: 4;
-    --destroyer-length: 3;
-    --submarine-length: 3;
-    --patrol-boat-length: 2;
-}
-
-/* All ship lengths */
-.carrier-image {
-    width: calc(100% * var(--carrier-length) + (var(--carrier-length) - 1) * var(--cell-border-width) * 2);
-}
-.battleship-image {
-    width: calc(100% * var(--battleship-length) + (var(--battleship-length) - 1) * var(--cell-border-width) * 2);
-}
-.destroyer-image {
-    width: calc(100% * var(--destroyer-length) + (var(--destroyer-length) - 1) * var(--cell-border-width) * 2);
-}
-.submarine-image {
-    width: calc(100% * var(--submarine-length) + (var(--submarine-length) - 1) * var(--cell-border-width) * 2);
-}
-.patrol-boat-image {
-    width: calc(100% * var(--patrol-boat-length) + (var(--patrol-boat-length) - 1) * var(--cell-border-width) * 2);
 }
 
 /* Vertical ships */
@@ -84,8 +99,130 @@ main {
     transform: rotate(90deg) translateY(-100%);
 }
 
+/* || Place Ships Scene */
+.place-ships-scene-wrapper {
+    --cell-size: 85px;
+
+    display: grid;
+    grid-template-rows: 780px 60px;
+    grid-template-columns: 5fr 3fr;
+    gap: 20px 50px;
+    justify-items: center;
+
+    margin: 0 auto;
+    padding: 60px 200px 0;
+
+    .gameboard-wrapper {
+        grid-area: 1 / 1 / 3 / 2;
+        height: 100%;
+    }
+
+    /* Calculated ship lengths */
+    & .carrier-image {
+        width: calc(var(--cell-size) * var(--carrier-length));
+    }
+    & .battleship-image {
+        width: calc(var(--cell-size) * var(--battleship-length));
+    }
+    & .destroyer-image {
+        width: calc(var(--cell-size) * var(--destroyer-length));
+    }
+    & .submarine-image {
+        width: calc(var(--cell-size) * var(--submarine-length));
+    }
+    & .patrol-boat-image {
+        width: calc(var(--cell-size) * var(--patrol-boat-length));
+    }
+}
+
+.draggable-ships-wrapper {
+    grid-area: 1 / 2 / 2 / 3;
+    align-self: stretch;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    border: 6px solid black; /* temp */
+    border-radius: 20px;
+    padding: 20px 40px;
+
+    .ships-heading {
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+
+    .ships-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .ship-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        border: 4px solid black;
+        border-radius: 15px;
+    }
+
+    .image-wrapper {
+        height: 85px;
+        display: flex;
+        margin: 0 10px;
+    }
+
+    .divider {
+        align-self: stretch;
+        height: 4px;
+        background-color: black;
+    }
+
+    figcaption {
+        align-self: stretch;
+        padding: 5px 0;
+        border-radius: 0 0 10px 10px;
+
+        background-color: bisque;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+}
+
+.place-ships-buttons-container {
+    grid-area: 2 / 2 / 3 / 3;
+
+    display: flex;
+    gap: 40px;
+
+    button {
+        padding: 15px 25px;
+        border: none;
+        border-radius: 10px;
+
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}
+
+/* || Game Scene */
+.game-scene-wrapper {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 2fr 5fr 5fr 2fr;
+    column-gap: 100px;
+
+    margin: 0 auto;
+    width: 80%;
+}
+
 /* Hit attack on players gameboard cell */
-.player-gameboard .hit-attack  {
+.player-gameboard .hit-attack {
     background-color: rgba(255, 0, 0, 0.6);
 }
 

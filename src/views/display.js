@@ -66,15 +66,24 @@ const renderDraggableShips = () => {
         const shipWrapper = document.createElement("figure");
         shipWrapper.classList.add("ship-wrapper");
 
+        const imageWrapper = document.createElement("div");
+        imageWrapper.classList.add("image-wrapper");
+
         const shipImage = document.createElement("img");
         shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`);
         shipImage.src = shipImages[ship];
         shipImage.draggable = true;
 
+        const divLine = document.createElement("div");
+        divLine.classList.add("divider");
+
         const shipCaption = document.createElement("figcaption");
         shipCaption.textContent = capitalizeName(ship);
 
-        shipWrapper.appendChild(shipImage);
+        imageWrapper.appendChild(shipImage);
+
+        shipWrapper.appendChild(imageWrapper);
+        shipWrapper.appendChild(divLine);
         shipWrapper.appendChild(shipCaption);
 
         shipsContainer.appendChild(shipWrapper);
@@ -177,7 +186,7 @@ const renderPlayerGameboard = (
             shipImage.classList.add("vertical-image");
         }
         shipImage.src = shipImages[ship];
-        
+
         firstCoordinateCell.appendChild(shipImage);
     }
 
