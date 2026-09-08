@@ -1,4 +1,4 @@
-<svg width="480" height="120" viewBox="12 0 100 30" xmlns="http://www.w3.org/2000/svg">
+<svg width="340" height="85" viewBox="12 0 100 30" xmlns="http://www.w3.org/2000/svg">
     <g class="silhouette" stroke-width="0.5">
         <!-- Sleek modernized hull -->
         <polygon points="5,26 15,18 120,18 116,26" />

@@ -1,4 +1,4 @@
-<svg width="360" height="120" viewBox="0 0 100 28" xmlns="http://www.w3.org/2000/svg">
+<svg width="255" height="85" viewBox="0 0 100 28" xmlns="http://www.w3.org/2000/svg">
     <g class="silhouette" stroke-width="0.5">
         <!-- Hull -->
         <polygon points="6,26 18,17 96,17 94,26" />
