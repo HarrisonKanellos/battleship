@@ -86,7 +86,7 @@ main {
     }
 }
 
-[class^="cell"] {
+.cell {
     --cell-border-width: 1px;
 
     min-height: 0; /* Prevents grid cells with ships expanding */

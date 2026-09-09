@@ -154,13 +154,14 @@ const renderGameboard = (playerType) => {
 };
 
 const renderGameboardCells = (gameboard) => {
-    const COLUMN_CHARS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+    const columnChars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
     for (let row = 1; row <= 10; row++) {
         for (let column = 1; column <= 10; column++) {
             const cell = document.createElement("div");
+            const columnChar = columnChars[column - 1];
 
-            const columnChar = COLUMN_CHARS[column - 1];
-            cell.classList.add(`cell-${columnChar}${row}`);
+            cell.classList.add("cell");
+            cell.dataset.coordinate = `${columnChar}${row}`;
 
             gameboard.appendChild(cell);
         }
@@ -177,7 +178,7 @@ const renderPlayerGameboard = (
     for (const ship in shipPositions) {
         const firstCoordinate = shipPositions[ship].coordinates[0];
         const firstCoordinateCell = gameboard.querySelector(
-            `.cell-${firstCoordinate}`,
+            `[data-coordinate="${firstCoordinate}"]`,
         );
 
         const shipImage = document.createElement("img");
@@ -192,13 +193,13 @@ const renderPlayerGameboard = (
 
     // Display hits
     for (const coordinate of hitCoordinates) {
-        const coordinateCell = gameboard.querySelector(`.cell-${coordinate}`);
+        const coordinateCell = gameboard.querySelector(`[data-coordinate="${coordinate}"]`);
         coordinateCell.classList.add("hit-attack");
     }
 
     // Display misses
     for (const coordinate of missedAttacks) {
-        const coordinateCell = gameboard.querySelector(`.cell-${coordinate}`);
+        const coordinateCell = gameboard.querySelector(`[data-coordinate="${coordinate}"]`);
         coordinateCell.classList.add("missed-attack");
     }
 };
