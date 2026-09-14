@@ -8,24 +8,21 @@ const capitalizeName = (string) => {
 
 const getHoverCoordinates = (firstCoordinate, length, orientation) => {
     const coordinates = [];
-    const { columnChar, rowNum } = splitCoord(firstCoordinate);
-
-    coordinates.push(firstCoordinate);
+    const { columnChar, rowNumString } = splitCoord(firstCoordinate);
 
     if (orientation === "horizontal") {
-        const columnCharCode = columnChar.charCodeAt(0);
+        let currentColumnCharCode = columnChar.charCodeAt(0);
 
-        // Skip first coordinate, already pushed
-        for (let i = 1; i < length; i++) {
-            const currentColumnChar = String.fromCharCode(columnCharCode + 1);
-            const currentCoordinate = currentColumnChar.concat(rowNum);
+        for (let i = 0; i < length; i++) {
+            const currentColumnChar = String.fromCharCode(currentColumnCharCode++);
+            const currentCoordinate = currentColumnChar.concat(rowNumString);
             coordinates.push(currentCoordinate);
         }
     } else if (orientation === "vertical") {
-        // Skip first coordinate, already pushed
-        for (let i = 1; i < length; i++) {
-            const currentRowNum = rowNum + 1;
-            const currentCoordinate = columnChar.concat(currentRowNum);
+        let currentRowNum = Number(rowNumString);
+
+        for (let i = 0; i < length; i++) {
+            const currentCoordinate = columnChar.concat(currentRowNum++);
             coordinates.push(currentCoordinate);
         }
     }
@@ -33,19 +30,25 @@ const getHoverCoordinates = (firstCoordinate, length, orientation) => {
     return coordinates;
 };
 
-const validPlacement = (firstCoordinate, length, orientation) => {
+const isValidPlacement = (firstCoordinate, length, orientation) => {
     const LAST_COLUMN_CHAR_CODE = "J".charCodeAt(0);
     const LAST_ROW_NUM = 10;
 
-    const { columnChar, rowNum } = splitCoord(firstCoordinate);
+    const { columnChar, rowNumString } = splitCoord(firstCoordinate);
     const columnCharCode = columnChar.charCodeAt(0);
+    const rowNum = Number(rowNumString);
+    // Number of coordinates required after the first coordinate, based on ship length
+    const numCoordinatesRequired = Number(length) - 1;
 
     if (
         orientation === "horizontal" &&
-        columnCharCode + length > LAST_COLUMN_CHAR_CODE
+        columnCharCode + numCoordinatesRequired > LAST_COLUMN_CHAR_CODE
     ) {
         return false;
-    } else if (orientation === "vertical" && rowNum + length > LAST_ROW_NUM) {
+    } else if (
+        orientation === "vertical" &&
+        rowNum + numCoordinatesRequired > LAST_ROW_NUM
+    ) {
         return false;
     } else {
         return true;
@@ -56,10 +59,15 @@ const splitCoord = (coord) => {
     const nonDigit = /\D/;
     const digit = /\d/g;
 
-    const columnChar = coord.matches(nonDigit).toUpperCase();
-    const rowNum = coord.matches(digit);
+    const columnChar = coord.match(nonDigit).at(0);
+    const rowNumString = coord.match(digit).at(0);
 
-    return { columnChar, rowNum };
+    return { columnChar, rowNumString };
 };
 
-export { formatClassName, capitalizeName, validPlacement, getHoverCoordinates };
+export {
+    formatClassName,
+    capitalizeName,
+    isValidPlacement,
+    getHoverCoordinates,
+};
