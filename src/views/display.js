@@ -1,4 +1,9 @@
-import { formatClassName, capitalizeName } from "../helpers/displayHelpers.js";
+import {
+    formatClassName,
+    capitalizeName,
+    isValidPlacement,
+    getHoverCoordinates,
+} from "../helpers/displayHelpers.js";
 
 import carrierImage from "../assets/images/carrier.svg";
 import battleshipImage from "../assets/images/battleship.svg";
@@ -12,6 +17,14 @@ const shipImages = {
     destroyer: destroyerImage,
     submarine: submarineImage,
     "patrol boat": patrolBoatImage,
+};
+
+const shipLengths = {
+    carrier: 5,
+    battleship: 4,
+    destroyer: 3,
+    submarine: 3,
+    "patrol boat": 2,
 };
 
 const renderPlaceShipsScene = () => {
@@ -70,9 +83,11 @@ const renderDraggableShips = () => {
         imageWrapper.classList.add("image-wrapper");
 
         const shipImage = document.createElement("img");
-        shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`);
+        shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`, "horizontal");
+        shipImage.id = `draggable-${formatClassName(ship)}`;
         shipImage.src = shipImages[ship];
         shipImage.draggable = true;
+        shipImage.dataset.length = shipLengths[ship];
 
         const divLine = document.createElement("div");
         divLine.classList.add("divider");
@@ -204,4 +219,10 @@ const renderPlayerGameboard = (
     }
 };
 
-export { renderPlaceShipsScene, renderGameScene, renderPlayerGameboard };
+export {
+    renderPlaceShipsScene,
+    renderGameScene,
+    renderPlayerGameboard,
+    isValidPlacement,
+    getHoverCoordinates,
+};
