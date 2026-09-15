@@ -1,5 +1,5 @@
-import * as display from "./views/display.js";
+import { startGame } from "./controllers/game.js";
 
 import "./assets/styles/game-style.css";
 
-display.renderGameScene();
+startGame();
