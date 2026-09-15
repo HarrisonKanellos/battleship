@@ -32,7 +32,13 @@ const getShipOverCoordinates = (firstCoordinate, length, orientation) => {
     return coordinates;
 };
 
-const isValidPlacement = (firstCoordinate, length, orientation) => {
+const isValidPlacement = (
+    firstCoordinate,
+    length,
+    orientation,
+    shipName,
+    droppedShipCoordinates,
+) => {
     const LAST_COLUMN_CHAR_CODE = "J".charCodeAt(0);
     const LAST_ROW_NUM = 10;
 
@@ -42,19 +48,47 @@ const isValidPlacement = (firstCoordinate, length, orientation) => {
     // Number of coordinates required after the first coordinate, based on ship length
     const numCoordinatesRequired = Number(length) - 1;
 
+    // Check if ship is within gameboard dimensions
     if (
         orientation === "horizontal" &&
         columnCharCode + numCoordinatesRequired > LAST_COLUMN_CHAR_CODE
     ) {
         return false;
-    } else if (
+    }
+
+    if (
         orientation === "vertical" &&
         rowNum + numCoordinatesRequired > LAST_ROW_NUM
     ) {
         return false;
-    } else {
-        return true;
     }
+
+    // Check if ship overlaps with other ships
+    const shipOverCoordinates = getShipOverCoordinates(
+        firstCoordinate,
+        length,
+        orientation,
+    );
+    for (const ship in droppedShipCoordinates) {
+        // Null check current ship coordinates
+        if (!droppedShipCoordinates[ship]) {
+            continue;
+        }
+
+        // Skip ship currently being checked
+        if (ship === shipName) {
+            continue;
+        }
+
+        for (const coordinate of shipOverCoordinates) {
+            if (droppedShipCoordinates[ship].includes(coordinate)) {
+                return false;
+            }
+        }
+    }
+
+    // If valid placement
+    return true;
 };
 
 const splitCoord = (coord) => {
@@ -84,7 +118,7 @@ const removeClassFromCoordinates = (gameboard, coordinates, className) => {
     if (!coordinates) {
         return;
     }
-    
+
     coordinates.forEach((coordinate) => {
         const currentCell = gameboard.querySelector(
             `[data-coordinate="${coordinate}"]`,
