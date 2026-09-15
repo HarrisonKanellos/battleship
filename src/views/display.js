@@ -4,7 +4,7 @@ import {
     isValidPlacement,
     getShipOverCoordinates,
     addClassToCoordinates,
-    removeClassFromCells,
+    removeClassFromCoordinates,
 } from "../helpers/displayHelpers.js";
 
 import carrierImage from "../assets/images/carrier.svg";
@@ -90,6 +90,7 @@ const renderDraggableShips = () => {
         shipImage.src = shipImages[ship];
         shipImage.draggable = true;
         shipImage.dataset.length = shipLengths[ship];
+        shipImage.dataset.shipName = ship;
 
         const divLine = document.createElement("div");
         divLine.classList.add("divider");
@@ -228,5 +229,5 @@ export {
     isValidPlacement,
     getShipOverCoordinates,
     addClassToCoordinates,
-    removeClassFromCells,
+    removeClassFromCoordinates,
 };

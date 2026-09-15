@@ -68,6 +68,10 @@ const splitCoord = (coord) => {
 };
 
 const addClassToCoordinates = (gameboard, coordinates, className) => {
+    if (!coordinates) {
+        return;
+    }
+
     coordinates.forEach((coordinate) => {
         const currentCell = gameboard.querySelector(
             `[data-coordinate="${coordinate}"]`,
@@ -76,8 +80,17 @@ const addClassToCoordinates = (gameboard, coordinates, className) => {
     });
 };
 
-const removeClassFromCells = (cells, className) => {
-    cells.forEach((cell) => cell.classList.remove(className));
+const removeClassFromCoordinates = (gameboard, coordinates, className) => {
+    if (!coordinates) {
+        return;
+    }
+    
+    coordinates.forEach((coordinate) => {
+        const currentCell = gameboard.querySelector(
+            `[data-coordinate="${coordinate}"]`,
+        );
+        currentCell.classList.remove(className);
+    });
 };
 
 export {
@@ -86,5 +99,5 @@ export {
     isValidPlacement,
     getShipOverCoordinates,
     addClassToCoordinates,
-    removeClassFromCells,
+    removeClassFromCoordinates,
 };
