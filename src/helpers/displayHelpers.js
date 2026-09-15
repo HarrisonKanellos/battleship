@@ -6,7 +6,7 @@ const capitalizeName = (string) => {
     return string.at(0).toUpperCase() + string.slice(1);
 };
 
-const getHoverCoordinates = (firstCoordinate, length, orientation) => {
+const getShipOverCoordinates = (firstCoordinate, length, orientation) => {
     const coordinates = [];
     const { columnChar, rowNumString } = splitCoord(firstCoordinate);
 
@@ -14,7 +14,9 @@ const getHoverCoordinates = (firstCoordinate, length, orientation) => {
         let currentColumnCharCode = columnChar.charCodeAt(0);
 
         for (let i = 0; i < length; i++) {
-            const currentColumnChar = String.fromCharCode(currentColumnCharCode++);
+            const currentColumnChar = String.fromCharCode(
+                currentColumnCharCode++,
+            );
             const currentCoordinate = currentColumnChar.concat(rowNumString);
             coordinates.push(currentCoordinate);
         }
@@ -65,9 +67,24 @@ const splitCoord = (coord) => {
     return { columnChar, rowNumString };
 };
 
+const addClassToCoordinates = (gameboard, coordinates, className) => {
+    coordinates.forEach((coordinate) => {
+        const currentCell = gameboard.querySelector(
+            `[data-coordinate="${coordinate}"]`,
+        );
+        currentCell.classList.add(className);
+    });
+};
+
+const removeClassFromCells = (cells, className) => {
+    cells.forEach((cell) => cell.classList.remove(className));
+};
+
 export {
     formatClassName,
     capitalizeName,
     isValidPlacement,
-    getHoverCoordinates,
+    getShipOverCoordinates,
+    addClassToCoordinates,
+    removeClassFromCells,
 };

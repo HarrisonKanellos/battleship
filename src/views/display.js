@@ -2,7 +2,9 @@ import {
     formatClassName,
     capitalizeName,
     isValidPlacement,
-    getHoverCoordinates,
+    getShipOverCoordinates,
+    addClassToCoordinates,
+    removeClassFromCells,
 } from "../helpers/displayHelpers.js";
 
 import carrierImage from "../assets/images/carrier.svg";
@@ -224,5 +226,7 @@ export {
     renderGameScene,
     renderPlayerGameboard,
     isValidPlacement,
-    getHoverCoordinates,
+    getShipOverCoordinates,
+    addClassToCoordinates,
+    removeClassFromCells,
 };
