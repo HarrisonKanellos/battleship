@@ -60,7 +60,7 @@ const splitCoord = (coord) => {
     const digit = /\d/g;
 
     const columnChar = coord.match(nonDigit).at(0);
-    const rowNumString = coord.match(digit).at(0);
+    const rowNumString = coord.match(digit).join("");
 
     return { columnChar, rowNumString };
 };
