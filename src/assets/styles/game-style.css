@@ -121,6 +121,11 @@ main {
         grid-template-columns: repeat(10, 85px);
     }
 
+    & .ship-image {
+        position: relative;
+        z-index: 1;
+    }
+
     /* Calculated ship lengths */
     & .carrier-image {
         width: calc(var(--cell-size) * var(--carrier-length) - 10px);
@@ -137,6 +142,19 @@ main {
     & .patrol-boat-image {
         width: calc(var(--cell-size) * var(--patrol-boat-length));
     }
+}
+
+.dragging {
+    transition: 0.01s;
+    transform: translateX(-9999px);
+}
+
+.dragover {
+    background-color: rgba(172, 255, 47, 0.5);
+}
+
+.dropped {
+    background-color: rgba(0, 128, 0, 0.8);
 }
 
 .draggable-ships-wrapper {
