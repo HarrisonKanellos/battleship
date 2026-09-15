@@ -94,7 +94,7 @@ main {
 }
 
 /* Vertical ships */
-.vertical-image {
+.vertical {
     transform-origin: top left;
     transform: rotate(90deg) translateY(-100%);
 }

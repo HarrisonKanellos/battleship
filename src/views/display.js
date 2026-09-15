@@ -202,7 +202,7 @@ const renderPlayerGameboard = (
         const shipImage = document.createElement("img");
         shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`);
         if (shipPositions[ship].orientation === "vertical") {
-            shipImage.classList.add("vertical-image");
+            shipImage.classList.add("vertical");
         }
         shipImage.src = shipImages[ship];
 
