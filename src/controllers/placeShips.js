@@ -37,8 +37,23 @@ const initPlaceShipsEvents = () => {
 const handleDragStartShip = (event) => {
     const target = event.target;
     if (target.classList.contains("ship-image")) {
-        // Image offset points to center of first cell occupied by ship
-        event.dataTransfer.setDragImage(target, 42, 42);
+
+        /* Create a custom drag image for vertical ships
+           Image offset points to center of first cell occupied by ship */
+        if (target.classList.contains("vertical")) {
+            const verticalDragImageWrapper = document.createElement("div");
+            const verticalDragImage = target.cloneNode();
+            const placeShipsSceneWrapper = document.querySelector(".place-ships-scene-wrapper");
+
+            verticalDragImageWrapper.classList.add("vertical-drag-image-wrapper");
+
+            verticalDragImageWrapper.appendChild(verticalDragImage);
+            placeShipsSceneWrapper.appendChild(verticalDragImageWrapper);
+
+            event.dataTransfer.setDragImage(verticalDragImageWrapper, 42, 42);
+        } else {
+            event.dataTransfer.setDragImage(target, 42, 42);
+        }
         event.dataTransfer.effectAllowed = "move";
         draggedShipImage = target;
 
@@ -58,6 +73,7 @@ const handleDragStartShip = (event) => {
     }
 };
 
+// Hide source image while dragging
 const handleDraggingShip = (event) => {
     const target = event.target;
     if (target.classList.contains("ship-image")) {
@@ -175,6 +191,13 @@ const handleDragEndShip = (event) => {
         droppedShipCoordinates[shipName],
         "dropped",
     );
+
+    // Remove temporary vertical drag image
+    if (target.classList.contains("vertical")) {
+        const placeShipsSceneWrapper = document.querySelector(".place-ships-scene-wrapper");
+        const verticalDragImageWrapper = document.querySelector(".vertical-drag-image-wrapper");
+        placeShipsSceneWrapper.removeChild(verticalDragImageWrapper);
+    }
 
     // Remove dragging class
     target.classList.remove("dragging");

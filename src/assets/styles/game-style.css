@@ -126,6 +126,16 @@ main {
         z-index: 1;
     }
 
+    /* Moves custom vertical drag image off page
+       Ensures width is equal to that of rotated ship */
+    & .vertical-drag-image-wrapper {
+        position: absolute;
+        top: 0;
+        left: -9900px;
+
+        width: 85px;
+    }
+
     /* Calculated ship lengths */
     & .carrier-image {
         width: calc(var(--cell-size) * var(--carrier-length) - 10px);
