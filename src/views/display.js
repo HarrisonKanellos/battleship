@@ -32,6 +32,11 @@ const shipLengths = {
 const renderPlaceShipsScene = () => {
     const displayWrapper = document.querySelector(".display-wrapper");
 
+    // Remove all child elements from display
+    while (displayWrapper.hasChildNodes()) {
+        displayWrapper.removeChild(displayWrapper.firstChild);
+    }
+
     const placeShipsSceneWrapper = document.createElement("div");
     placeShipsSceneWrapper.classList.add("place-ships-scene-wrapper");
 
@@ -118,11 +123,11 @@ const renderPlaceShipsButtons = () => {
     buttonsContainer.classList.add("place-ships-buttons-container");
 
     const resetBoard = document.createElement("button");
-    resetBoard.classList.add("button-reset-board");
+    resetBoard.id = "button-reset-board";
     resetBoard.textContent = "Reset Board";
 
     const confirmPlacements = document.createElement("button");
-    confirmPlacements.classList.add("button-confirm-placements");
+    confirmPlacements.id = "button-confirm-placements";
     confirmPlacements.textContent = "Confirm Placements";
 
     buttonsContainer.appendChild(resetBoard);
