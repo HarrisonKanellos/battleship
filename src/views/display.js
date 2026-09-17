@@ -42,10 +42,12 @@ const renderPlaceShipsScene = () => {
 
     const gameboardWrapper = renderGameboard("player");
     const shipsWrapper = renderDraggableShips();
+    const messageWrapper = renderMessage();
     const buttonsWrapper = renderPlaceShipsButtons();
 
     placeShipsSceneWrapper.appendChild(gameboardWrapper);
     placeShipsSceneWrapper.appendChild(shipsWrapper);
+    placeShipsSceneWrapper.appendChild(messageWrapper);
     placeShipsSceneWrapper.appendChild(buttonsWrapper);
 
     displayWrapper.appendChild(placeShipsSceneWrapper);
@@ -93,7 +95,7 @@ const renderDraggableShips = () => {
         shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`, "horizontal");
         shipImage.id = `draggable-${formatClassName(ship)}`;
         shipImage.src = shipImages[ship];
-        shipImage.draggable = true;
+        shipImage.draggable = true;2
         shipImage.dataset.length = shipLengths[ship];
         shipImage.dataset.shipName = ship;
 
@@ -116,6 +118,19 @@ const renderDraggableShips = () => {
     shipsWrapper.appendChild(shipsContainer);
 
     return shipsWrapper;
+};
+
+const renderMessage = () => {
+    const messageWrapper = document.createElement("div");
+    messageWrapper.classList.add("message-wrapper");
+
+    const messageText = document.createElement("p");
+    messageText.classList.add("message-text");
+    messageText.textContent = "Drag your ships onto the board!"
+
+    messageWrapper.appendChild(messageText);
+
+    return messageWrapper;
 };
 
 const renderPlaceShipsButtons = () => {

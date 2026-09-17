@@ -62,9 +62,9 @@ const handleDragStartShip = (event) => {
             verticalDragImageWrapper.appendChild(verticalDragImage);
             placeShipsSceneWrapper.appendChild(verticalDragImageWrapper);
 
-            event.dataTransfer.setDragImage(verticalDragImageWrapper, 42, 42);
+            event.dataTransfer.setDragImage(verticalDragImageWrapper, 35, 35);
         } else {
-            event.dataTransfer.setDragImage(target, 42, 42);
+            event.dataTransfer.setDragImage(target, 35, 35);
         }
         event.dataTransfer.effectAllowed = "move";
         draggedShipImage = target;
@@ -295,7 +295,6 @@ const handleButtonClick = (event) => {
 
     if (target.id === "button-confirm-placements") {
         if (Object.values(droppedShipCoordinates).includes(null)) {
-            console.log("THERE WAS A NULL");
             // TODO: prompt user to place all ships
             return;
         }
