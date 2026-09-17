@@ -1,6 +1,7 @@
 import * as Display from "../views/display.js";
-import * as Player from "../models/player.js";
 
+let player;
+let onShipsPlaced;
 let draggedShipImage = null;
 
 const droppedShipCoordinates = {
@@ -11,7 +12,10 @@ const droppedShipCoordinates = {
     "patrol boat": null,
 };
 
-export const placeShips = () => {
+export const placeShips = (playerReference, onShipsPlacedCallback) => {
+    player = playerReference;
+    onShipsPlaced = onShipsPlacedCallback;
+
     Display.renderPlaceShipsScene();
     initPlaceShipsEvents();
 };
@@ -21,6 +25,9 @@ const initPlaceShipsEvents = () => {
         ".place-ships-scene-wrapper",
     );
     const gameboard = document.querySelector(".gameboard");
+    const buttonContainer = document.querySelector(
+        ".place-ships-buttons-container",
+    );
 
     placeShipsSceneWrapper.addEventListener("dragstart", handleDragStartShip);
     placeShipsSceneWrapper.addEventListener("drag", handleDraggingShip);
@@ -30,6 +37,8 @@ const initPlaceShipsEvents = () => {
     placeShipsSceneWrapper.addEventListener("dragend", handleDragEndShip);
 
     gameboard.addEventListener("click", handleToggleShipOrientation);
+
+    buttonContainer.addEventListener("click", handleButtonClick);
 };
 
 /* Assigns reference to ship being dragged 
@@ -37,15 +46,18 @@ const initPlaceShipsEvents = () => {
 const handleDragStartShip = (event) => {
     const target = event.target;
     if (target.classList.contains("ship-image")) {
-
         /* Create a custom drag image for vertical ships
            Image offset points to center of first cell occupied by ship */
         if (target.classList.contains("vertical")) {
             const verticalDragImageWrapper = document.createElement("div");
             const verticalDragImage = target.cloneNode();
-            const placeShipsSceneWrapper = document.querySelector(".place-ships-scene-wrapper");
+            const placeShipsSceneWrapper = document.querySelector(
+                ".place-ships-scene-wrapper",
+            );
 
-            verticalDragImageWrapper.classList.add("vertical-drag-image-wrapper");
+            verticalDragImageWrapper.classList.add(
+                "vertical-drag-image-wrapper",
+            );
 
             verticalDragImageWrapper.appendChild(verticalDragImage);
             placeShipsSceneWrapper.appendChild(verticalDragImageWrapper);
@@ -194,8 +206,12 @@ const handleDragEndShip = (event) => {
 
     // Remove temporary vertical drag image
     if (target.classList.contains("vertical")) {
-        const placeShipsSceneWrapper = document.querySelector(".place-ships-scene-wrapper");
-        const verticalDragImageWrapper = document.querySelector(".vertical-drag-image-wrapper");
+        const placeShipsSceneWrapper = document.querySelector(
+            ".place-ships-scene-wrapper",
+        );
+        const verticalDragImageWrapper = document.querySelector(
+            ".vertical-drag-image-wrapper",
+        );
         placeShipsSceneWrapper.removeChild(verticalDragImageWrapper);
     }
 
@@ -262,4 +278,33 @@ const handleToggleShipOrientation = (event) => {
 
     // Add dropped class on new coordinates
     Display.addClassToCoordinates(gameboard, newCoordinates, "dropped");
+};
+
+const handleButtonClick = (event) => {
+    const target = event.target;
+
+    if (target.id === "button-reset-board") {
+        // Reset all dropped coordinates to null
+        for (const ship in droppedShipCoordinates) {
+            droppedShipCoordinates[ship] = null;
+        }
+        // Re-render place ships scene
+        Display.renderPlaceShipsScene();
+        initPlaceShipsEvents();
+    }
+
+    if (target.id === "button-confirm-placements") {
+        if (Object.values(droppedShipCoordinates).includes(null)) {
+            console.log("THERE WAS A NULL");
+            // TODO: prompt user to place all ships
+            return;
+        }
+
+        for (const ship in droppedShipCoordinates) {
+            player.gameboard.setCoordinatesOf(ship, droppedShipCoordinates[ship]);
+        }
+
+        // Control given back to game controller
+        onShipsPlaced();
+    }
 };

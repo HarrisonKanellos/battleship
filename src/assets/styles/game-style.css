@@ -124,6 +124,8 @@ main {
     & .ship-image {
         position: relative;
         z-index: 1;
+
+        cursor: pointer;
     }
 
     /* Moves custom vertical drag image off page
@@ -238,7 +240,10 @@ main {
         padding: 15px 25px;
         border: none;
         border-radius: 10px;
+        outline: none;
 
+        background-color: grey;
+        color: whitesmoke;
         font-size: 1rem;
         font-weight: bold;
         cursor: pointer;
