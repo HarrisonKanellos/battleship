@@ -3,11 +3,18 @@ import { playGame } from "./playGame.js";
 import * as Player from "../models/player.js";
 
 const players = {
-    computerPlayer: Player.createComputerPlayer(),
-    realPlayer: Player.createRealPlayer(),
+    computerPlayer: null,
+    realPlayer: null,
+};
+
+const initPlayers = () => {
+    players.computerPlayer = Player.createComputerPlayer();
+    players.realPlayer = Player.createRealPlayer();
 };
 
 export const startGame = () => {
+    initPlayers();
+    // TODO: Modal to get players name
     showPlaceShips();
 };
 
@@ -20,5 +27,5 @@ const showPlayGame = () => {
 };
 
 const handleGameOver = () => {
-
+    // TODO: Game ends logic - prompt to play again
 };

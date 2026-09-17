@@ -56,6 +56,11 @@ const renderPlaceShipsScene = () => {
 const renderGameScene = () => {
     const displayWrapper = document.querySelector(".display-wrapper");
 
+    // Remove all child elements from display
+    while (displayWrapper.hasChildNodes()) {
+        displayWrapper.removeChild(displayWrapper.firstChild);
+    }
+
     const gameSceneWrapper = document.createElement("div");
     gameSceneWrapper.classList.add("game-scene-wrapper");
 
