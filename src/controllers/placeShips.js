@@ -1,6 +1,7 @@
 import * as Display from "../views/display.js";
-import * as Player from "../models/player.js";
 
+let player;
+let onShipsPlaced;
 let draggedShipImage = null;
 
 const droppedShipCoordinates = {
@@ -11,7 +12,10 @@ const droppedShipCoordinates = {
     "patrol boat": null,
 };
 
-export const placeShips = () => {
+export const placeShips = (playerReference, onShipsPlacedCallback) => {
+    player = playerReference;
+    onShipsPlaced = onShipsPlacedCallback;
+
     Display.renderPlaceShipsScene();
     initPlaceShipsEvents();
 };
@@ -21,6 +25,9 @@ const initPlaceShipsEvents = () => {
         ".place-ships-scene-wrapper",
     );
     const gameboard = document.querySelector(".gameboard");
+    const buttonContainer = document.querySelector(
+        ".place-ships-buttons-container",
+    );
 
     placeShipsSceneWrapper.addEventListener("dragstart", handleDragStartShip);
     placeShipsSceneWrapper.addEventListener("drag", handleDraggingShip);
@@ -30,6 +37,8 @@ const initPlaceShipsEvents = () => {
     placeShipsSceneWrapper.addEventListener("dragend", handleDragEndShip);
 
     gameboard.addEventListener("click", handleToggleShipOrientation);
+
+    buttonContainer.addEventListener("click", handleButtonClick);
 };
 
 /* Assigns reference to ship being dragged 
@@ -37,8 +46,26 @@ const initPlaceShipsEvents = () => {
 const handleDragStartShip = (event) => {
     const target = event.target;
     if (target.classList.contains("ship-image")) {
-        // Image offset points to center of first cell occupied by ship
-        event.dataTransfer.setDragImage(target, 42, 42);
+        /* Create a custom drag image for vertical ships
+           Image offset points to center of first cell occupied by ship */
+        if (target.classList.contains("vertical")) {
+            const verticalDragImageWrapper = document.createElement("div");
+            const verticalDragImage = target.cloneNode();
+            const placeShipsSceneWrapper = document.querySelector(
+                ".place-ships-scene-wrapper",
+            );
+
+            verticalDragImageWrapper.classList.add(
+                "vertical-drag-image-wrapper",
+            );
+
+            verticalDragImageWrapper.appendChild(verticalDragImage);
+            placeShipsSceneWrapper.appendChild(verticalDragImageWrapper);
+
+            event.dataTransfer.setDragImage(verticalDragImageWrapper, 35, 35);
+        } else {
+            event.dataTransfer.setDragImage(target, 35, 35);
+        }
         event.dataTransfer.effectAllowed = "move";
         draggedShipImage = target;
 
@@ -58,6 +85,7 @@ const handleDragStartShip = (event) => {
     }
 };
 
+// Hide source image while dragging
 const handleDraggingShip = (event) => {
     const target = event.target;
     if (target.classList.contains("ship-image")) {
@@ -176,6 +204,17 @@ const handleDragEndShip = (event) => {
         "dropped",
     );
 
+    // Remove temporary vertical drag image
+    if (target.classList.contains("vertical")) {
+        const placeShipsSceneWrapper = document.querySelector(
+            ".place-ships-scene-wrapper",
+        );
+        const verticalDragImageWrapper = document.querySelector(
+            ".vertical-drag-image-wrapper",
+        );
+        placeShipsSceneWrapper.removeChild(verticalDragImageWrapper);
+    }
+
     // Remove dragging class
     target.classList.remove("dragging");
 
@@ -239,4 +278,39 @@ const handleToggleShipOrientation = (event) => {
 
     // Add dropped class on new coordinates
     Display.addClassToCoordinates(gameboard, newCoordinates, "dropped");
+};
+
+const handleButtonClick = (event) => {
+    const target = event.target;
+
+    if (target.id === "button-reset-board") {
+        // Reset all dropped coordinates to null
+        for (const ship in droppedShipCoordinates) {
+            droppedShipCoordinates[ship] = null;
+        }
+        // Re-render place ships scene
+        Display.resetShipPlacements();
+    }
+
+    if (target.id === "button-confirm-placements") {
+        const shipsNotPlaced = Object.values(droppedShipCoordinates).includes(
+            null,
+        );
+        if (shipsNotPlaced) {
+            const messageText = document.querySelector(".message-text");
+            messageText.textContent =
+                "You must place all of your ships onto the board!";
+            return;
+        }
+
+        for (const ship in droppedShipCoordinates) {
+            player.gameboard.setCoordinatesOf(
+                ship,
+                droppedShipCoordinates[ship],
+            );
+        }
+
+        // Control given back to game controller
+        onShipsPlaced();
+    }
 };
