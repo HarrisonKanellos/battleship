@@ -17,7 +17,7 @@ const showPlaceShips = () => {
 
 const showPlayGame = () => {
     playGame(players, handleGameOver);
-}
+};
 
 const handleGameOver = () => {
 

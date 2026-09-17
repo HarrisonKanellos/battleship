@@ -90,12 +90,16 @@ const renderDraggableShips = () => {
 
         const imageWrapper = document.createElement("div");
         imageWrapper.classList.add("image-wrapper");
+        imageWrapper.dataset.forShipName = ship;
 
         const shipImage = document.createElement("img");
-        shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`, "horizontal");
-        shipImage.id = `draggable-${formatClassName(ship)}`;
+        shipImage.classList.add(
+            "ship-image",
+            `${formatClassName(ship)}-image`,
+            "horizontal",
+        );
         shipImage.src = shipImages[ship];
-        shipImage.draggable = true;2
+        shipImage.draggable = true;
         shipImage.dataset.length = shipLengths[ship];
         shipImage.dataset.shipName = ship;
 
@@ -126,7 +130,7 @@ const renderMessage = () => {
 
     const messageText = document.createElement("p");
     messageText.classList.add("message-text");
-    messageText.textContent = "Drag your ships onto the board!"
+    messageText.textContent = "Drag your ships onto the board!";
 
     messageWrapper.appendChild(messageText);
 
@@ -149,6 +153,31 @@ const renderPlaceShipsButtons = () => {
     buttonsContainer.appendChild(confirmPlacements);
 
     return buttonsContainer;
+};
+
+const resetShipPlacements = () => {
+    const shipImages = document.querySelectorAll(".ship-image");
+    const imageWrappersNodeList = document.querySelectorAll(".image-wrapper");
+    const imageWrappers = Array.from(imageWrappersNodeList);
+
+    shipImages.forEach((shipImage) => {
+        // Remove from gameboard
+        shipImage.parentNode.removeChild(shipImage);
+
+        // Reset to horizontal
+        shipImage.classList.remove("vertical");
+        shipImage.classList.add("horizontal");
+
+        // Add back to list
+        const shipName = shipImage.dataset.shipName;
+        const wrapper = imageWrappers.find(
+            (wrapper) => wrapper.dataset.forShipName === shipName,
+        );
+        wrapper.appendChild(shipImage);
+    });
+
+    const droppedCells = document.querySelectorAll(".dropped");
+    droppedCells.forEach((cell) => cell.classList.remove("dropped"));
 };
 
 const renderShipsList = (playerType) => {
@@ -231,19 +260,24 @@ const renderPlayerGameboard = (
 
     // Display hits
     for (const coordinate of hitCoordinates) {
-        const coordinateCell = gameboard.querySelector(`[data-coordinate="${coordinate}"]`);
+        const coordinateCell = gameboard.querySelector(
+            `[data-coordinate="${coordinate}"]`,
+        );
         coordinateCell.classList.add("hit-attack");
     }
 
     // Display misses
     for (const coordinate of missedAttacks) {
-        const coordinateCell = gameboard.querySelector(`[data-coordinate="${coordinate}"]`);
+        const coordinateCell = gameboard.querySelector(
+            `[data-coordinate="${coordinate}"]`,
+        );
         coordinateCell.classList.add("missed-attack");
     }
 };
 
 export {
     renderPlaceShipsScene,
+    resetShipPlacements,
     renderGameScene,
     renderPlayerGameboard,
     isValidPlacement,

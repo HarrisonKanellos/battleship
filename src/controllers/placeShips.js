@@ -289,18 +289,25 @@ const handleButtonClick = (event) => {
             droppedShipCoordinates[ship] = null;
         }
         // Re-render place ships scene
-        Display.renderPlaceShipsScene();
-        initPlaceShipsEvents();
+        Display.resetShipPlacements();
     }
 
     if (target.id === "button-confirm-placements") {
-        if (Object.values(droppedShipCoordinates).includes(null)) {
-            // TODO: prompt user to place all ships
+        const shipsNotPlaced = Object.values(droppedShipCoordinates).includes(
+            null,
+        );
+        if (shipsNotPlaced) {
+            const messageText = document.querySelector(".message-text");
+            messageText.textContent =
+                "You must place all of your ships onto the board!";
             return;
         }
 
         for (const ship in droppedShipCoordinates) {
-            player.gameboard.setCoordinatesOf(ship, droppedShipCoordinates[ship]);
+            player.gameboard.setCoordinatesOf(
+                ship,
+                droppedShipCoordinates[ship],
+            );
         }
 
         // Control given back to game controller
