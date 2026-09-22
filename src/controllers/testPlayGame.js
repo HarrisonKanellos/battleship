@@ -15,7 +15,7 @@ const testCoordinates = {
     },
 };
 
-const testSetCoordinates = () => {
+const testSetCoordinates = (players) => {
     Object.keys(testCoordinates.realPlayer).forEach((shipName) => {
         players.realPlayer.gameboard.setCoordinatesOf(
             shipName,
@@ -30,7 +30,7 @@ const testSetCoordinates = () => {
     });
 };
 
-const testHitCoordinates = () => {
+const testHitCoordinates = (players) => {
     players.realPlayer.gameboard.receiveAttack("A7");
     players.realPlayer.gameboard.receiveAttack("B2");
     players.realPlayer.gameboard.receiveAttack("F10");
@@ -39,7 +39,4 @@ const testHitCoordinates = () => {
     players.realPlayer.gameboard.receiveAttack("E8");
 };
 
-export {
-    testSetCoordinates,
-    testHitCoordinates,
-};
+export { testSetCoordinates, testHitCoordinates };
