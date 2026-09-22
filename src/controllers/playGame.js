@@ -4,6 +4,7 @@ import { testSetCoordinates, testHitCoordinates } from "./testPlayGame.js"; // T
 
 let realPlayer, computerPlayer;
 let onGameWinner;
+let activePlayer = realPlayer;
 
 export const playGame = (playersReference, onGameWinnerCallback) => {
     ({ realPlayer, computerPlayer } = playersReference);
@@ -26,4 +27,41 @@ const renderScene = () => {
         hitCoordinates,
         missedAttacks,
     );
+};
+
+const initPlayGameEvents = () => {
+    const enemyGameboard = document.querySelector(".enemy-gameboard");
+
+    enemyGameboard.addEventListener("click", handleClickAttack);
+};
+
+const handleClickAttack = (event) => {
+    const target = event.target;
+
+    const isCell = target.classList.contains(".cell");
+    const isRealPlayersTurn = activePlayer === realPlayer;
+    if (!isCell || !isRealPlayersTurn) {
+        return;
+    }
+
+    const coordinate = target.dataset.coordinate;
+    const isSuccessfulAttack = handlePlayerAttack(realPlayer, coordinate);
+    if (!isSuccessfulAttack) {
+        return;
+    }
+
+    // TODO: render enemy gameboard state
+    // TODO: render enemy ships list state
+};
+
+const handlePlayerAttack = (player, coordinate) => {
+    try {
+        player.gameboard.receiveAttack(coordinate);
+    } catch (error) {
+        if (error instanceof RangeError) {
+            console.error(error);
+        }
+        return false;
+    }
+    return true;
 };
