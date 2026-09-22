@@ -23,24 +23,22 @@ function createComputerPlayer() {
     const recentAttack = {
         isHit: null,
         coordinate: null,
-    }
+    };
 
     const setRecentAttack = (isHit, coordinate) => {
         recentAttack.isHit = isHit;
         recentAttack.coordinate = coordinate;
     };
 
-    const getRecentAttack = () => {
-        return {
-            isHit: recentAttack.isHit,
-            coordinate: recentAttack.coordinate,
-        };
-    };
+    const recentAttackIsHit = () => recentAttack.isHit;
+
+    const recentAttackCoordinate = () => recentAttack.coordinate;
 
     return {
         gameboard,
         setRecentAttack,
-        getRecentAttack,
+        recentAttackIsHit,
+        recentAttackCoordinate,
     };
 }
 
