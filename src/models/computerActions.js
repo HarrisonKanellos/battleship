@@ -116,4 +116,26 @@ const getRandomDirection = () => {
     }
 };
 
-export { getRandomCoordinate, getRandomPlacement, getAdjacentCoordinate };
+const getDirectionFromCoordinates = (baseCoordinate, adjacentCoordinate) => {
+    const baseColumnCharCode = baseCoordinate.at(0).charCodeAt(0);
+    const baseRowNum = Number(baseCoordinate.slice(1));
+    const adjacentColumnCharCode = adjacentCoordinate.at(0).charCodeAt(0);
+    const adjacentRowNum = Number(adjacentCoordinate.slice(1));
+
+    if (baseRowNum < adjacentRowNum) {
+        return "up";
+    } else if (baseColumnCharCode < adjacentColumnCharCode) {
+        return "right";
+    } else if (baseRowNum > adjacentRowNum) {
+        return "down";
+    } else {
+        return "left";
+    }
+};
+
+export {
+    getRandomCoordinate,
+    getRandomPlacement,
+    getAdjacentCoordinate,
+    getDirectionFromCoordinates,
+};
