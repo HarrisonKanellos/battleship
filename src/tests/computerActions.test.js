@@ -1,6 +1,7 @@
 import {
     getRandomCoordinate,
     getRandomPlacement,
+    getDirectionFromCoordinates,
 } from "../models/computerActions";
 
 const isValidColumnChar = (columnChar) => {
@@ -51,5 +52,23 @@ describe("getRandomPlacement return coordinates array", () => {
 
         expect(isValidLength(randomPlacement, length)).toBe(true);
         expect(isValidCoordinateRanges(randomPlacement)).toBe(true);
+    });
+});
+
+describe("getDirectionFromCoordinate returns correct direction", () => {
+    test("returns up", () => {
+        expect(getDirectionFromCoordinates("B3", "B4")).toBe("up");
+    });
+
+    test("returns right", () => {
+        expect(getDirectionFromCoordinates("G7", "H7")).toBe("right");
+    });
+
+    test("returns down", () => {
+        expect(getDirectionFromCoordinates("F5", "F4")).toBe("down");
+    });
+
+    test("returns left", () => {
+        expect(getDirectionFromCoordinates("B2", "A2")).toBe("left");
     });
 });
