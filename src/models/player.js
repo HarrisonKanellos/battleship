@@ -20,9 +20,27 @@ function createRealPlayer(name) {
 
 function createComputerPlayer() {
     const { gameboard } = createPlayer();
+    const recentAttack = {
+        isHit: null,
+        coordinate: null,
+    }
+
+    const setRecentAttack = (isHit, coordinate) => {
+        recentAttack.isHit = isHit;
+        recentAttack.coordinate = coordinate;
+    };
+
+    const getRecentAttack = () => {
+        return {
+            isHit: recentAttack.isHit,
+            coordinate: recentAttack.coordinate,
+        };
+    };
 
     return {
         gameboard,
+        setRecentAttack,
+        getRecentAttack,
     };
 }
 
