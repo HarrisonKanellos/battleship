@@ -5,7 +5,7 @@ import {
 
 const isValidColumnChar = (columnChar) => {
     const columnCharCode = columnChar.charCodeAt(0);
-    return columnCharCode >= 65 && columnCharCode <= 74; 
+    return columnCharCode >= 65 && columnCharCode <= 74;
 };
 const isValidRowNum = (rowNumStr) => {
     const rowNum = Number(rowNumStr);
@@ -13,7 +13,6 @@ const isValidRowNum = (rowNumStr) => {
 };
 
 describe("getRandomCoordinate return coordinate", () => {
-
     test("is valid coordinate", () => {
         for (let i = 0; i < 10; i++) {
             const randomCoordinate = getRandomCoordinate();
@@ -27,7 +26,8 @@ describe("getRandomCoordinate return coordinate", () => {
 });
 
 describe("getRandomPlacement return coordinates array", () => {
-    const isValidLength = (randomPlacement, length) => randomPlacement.length === length;
+    const isValidLength = (randomPlacement, length) =>
+        randomPlacement.length === length;
     const isValidCoordinateRanges = (randomPlacement) => {
         return randomPlacement.every((coordinate) => {
             const columnChar = coordinate.at(0);

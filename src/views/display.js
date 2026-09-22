@@ -240,7 +240,7 @@ const renderGameboardCells = (gameboard) => {
     }
 };
 
-const renderPlayerGameboard = (
+const renderPlayerGameboardState = (
     gameboard,
     shipPositions,
     hitCoordinates,
@@ -284,7 +284,7 @@ export {
     renderPlaceShipsScene,
     resetShipPlacements,
     renderGameScene,
-    renderPlayerGameboard,
+    renderPlayerGameboardState,
     isValidPlacement,
     getShipOverCoordinates,
     addClassToCoordinates,
