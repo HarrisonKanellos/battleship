@@ -1,4 +1,5 @@
 import { createGameboard } from "./gameboard.js";
+import { defineActions } from "./computerActions.js";
 
 function createPlayer() {
     const gameboard = createGameboard();
@@ -20,25 +21,11 @@ function createRealPlayer(name) {
 
 function createComputerPlayer() {
     const { gameboard } = createPlayer();
-    const recentAttack = {
-        isHit: null,
-        coordinate: null,
-    };
-
-    const setRecentAttack = (isHit, coordinate) => {
-        recentAttack.isHit = isHit;
-        recentAttack.coordinate = coordinate;
-    };
-
-    const recentAttackIsHit = () => recentAttack.isHit;
-
-    const recentAttackCoordinate = () => recentAttack.coordinate;
-
+    const actions = defineActions();
+    
     return {
         gameboard,
-        setRecentAttack,
-        recentAttackIsHit,
-        recentAttackCoordinate,
+        actions,
     };
 }
 

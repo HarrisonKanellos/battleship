@@ -1,5 +1,72 @@
 import { coordinatesInRange } from "../helpers/gameboardChecks.js";
 
+const previousAttacks = [];
+const recentAttack = {
+    isHit: null,
+    coordinate: null,
+    sunkShip: null,
+};
+
+export const defineActions = () => {
+    return {
+        getRandomPlacement,
+        addCompletedAttack,
+        setRecentAttack,
+        getNewAttack,
+    };
+};
+
+const addCompletedAttack = (coordinate) => {
+    previousAttacks.push(coordinate);
+};
+
+const setRecentAttack = (isHit, coordinate, sunkShip) => {
+    // Keep the most recent hit after an adjacent miss
+    // Ensures computer keeps targeting ship until it is sunk
+    if (recentAttack.isHit && !isHit) {
+        return;
+    }
+
+    recentAttack.isHit = isHit;
+    recentAttack.coordinate = coordinate;
+    recentAttack.sunkShip = sunkShip;
+};
+
+const getNewAttack = () => {
+    let newAttackCoordinate;
+    let isUniqueAttack = false;
+    const usedAdjacentDirections = [];
+
+    do {
+        if (recentAttack.isHit && !recentAttack.sunkShip) {
+            // Target adjacent to recent hit if ship hasn't been sunk
+            newAttackCoordinate = getAdjacentCoordinate(
+                recentAttack.coordinate,
+                usedAdjacentDirections,
+            );
+
+            if (previousAttacks.includes(newAttackCoordinate)) {
+                const direction = getDirectionFromCoordinates(
+                    recentAttack.coordinate,
+                    newAttackCoordinate,
+                );
+                usedAdjacentDirections.push(direction);
+            } else {
+                isUniqueAttack = true;
+            }
+        } else {
+            // Target random coordinate if recent attack missed or sunk ship
+            newAttackCoordinate = getRandomCoordinate();
+
+            if (!previousAttacks.includes(newAttackCoordinate)) {
+                isUniqueAttack = true;
+            }
+        }
+    } while (!isUniqueAttack);
+
+    return newAttackCoordinate;
+};
+
 const getRandomCoordinate = () => {
     const charCodeA = "A".charCodeAt(0);
 
@@ -131,11 +198,4 @@ const getDirectionFromCoordinates = (baseCoordinate, adjacentCoordinate) => {
     } else {
         return "left";
     }
-};
-
-export {
-    getRandomCoordinate,
-    getRandomPlacement,
-    getAdjacentCoordinate,
-    getDirectionFromCoordinates,
 };
