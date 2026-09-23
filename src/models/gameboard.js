@@ -83,13 +83,6 @@ export function createGameboard() {
         return gbState.missedAttacks;
     };
 
-    const coordinateAlreadyAttacked = (coordinate) => {
-        return (
-            getHitCoordinates().includes(coordinate) ||
-            getMisses().includes(coordinate)
-        );
-    };
-
     const allSunk = () => {
         return gbState.ships.every((ship) => ship.isSunk());
     };
