@@ -44,7 +44,6 @@ const getNewAttack = () => {
                 recentAttack.coordinate,
                 usedAdjacentDirections,
             );
-
             if (previousAttacks.includes(newAttackCoordinate)) {
                 const direction = getDirectionFromCoordinates(
                     recentAttack.coordinate,
@@ -57,7 +56,6 @@ const getNewAttack = () => {
         } else {
             // Target random coordinate if recent attack missed or sunk ship
             newAttackCoordinate = getRandomCoordinate();
-
             if (!previousAttacks.includes(newAttackCoordinate)) {
                 isUniqueAttack = true;
             }
@@ -73,7 +71,6 @@ const getRandomCoordinate = () => {
     const randomColumnCharCode = charCodeA + Math.floor(Math.random() * 10);
     const randomColumnChar = String.fromCharCode(randomColumnCharCode);
     const randomRowNum = Math.ceil(Math.random() * 10);
-
     const randomCoordinate = randomColumnChar.concat(randomRowNum);
 
     return randomCoordinate;
@@ -84,7 +81,6 @@ const getAdjacentCoordinate = (coordinate, usedDirections = []) => {
     let isUniqueDirection = false;
     do {
         randomDirection = getRandomDirection();
-
         if (!usedDirections.includes(randomDirection)) {
             usedDirections.push(randomDirection);
             isUniqueDirection = true;
@@ -106,12 +102,13 @@ const getAdjacentCoordinate = (coordinate, usedDirections = []) => {
         case "left":
             columnCharCode--;
     }
+
     const adjacentCoordinate =
         String.fromCharCode(columnCharCode).concat(rowNum);
-
     if (coordinatesInRange([adjacentCoordinate])) {
         return adjacentCoordinate;
     }
+
     return getAdjacentCoordinate(coordinate, usedDirections);
 };
 
@@ -156,6 +153,7 @@ const getRandomPlacement = (length) => {
                 --rowNum;
                 newCoordinate = columnChar.concat(rowNum);
             }
+            
             return newCoordinate;
         });
 
