@@ -201,7 +201,7 @@ const renderShipsList = (playerType) => {
         `${playerType}-ships-conatiner`,
     );
 
-    // Display list of draggable ships
+    // Render ships status list
 
     shipsWrapper.appendChild(shipsHeading);
     shipsWrapper.appendChild(shipsContainer);
@@ -246,6 +246,8 @@ const renderPlayerGameboardState = (
     hitCoordinates,
     missedAttacks,
 ) => {
+    clearPlayerGameboard(gameboard);
+
     // Display ships
     for (const ship in shipPositions) {
         const firstCoordinate = shipPositions[ship].coordinates[0];
@@ -278,6 +280,24 @@ const renderPlayerGameboardState = (
         );
         coordinateCell.classList.add("missed-attack");
     }
+};
+
+const clearPlayerGameboard = (gameboard) => {
+    // Remove ships
+    const shipImages = gameboard.querySelectorAll(".ship-image");
+    if (shipImages) {
+        shipImages.forEach((shipImage) =>
+            shipImage.parentNode.removeChild(shipImage),
+        );
+    }
+
+    // Remove hits
+    const hitCells = gameboard.querySelectorAll(".hit-attack");
+    hitCells.forEach((cell) => cell.classList.remove("hit-attack"));
+
+    // Remove misses
+    const missedCells = gameboard.querySelectorAll(".missed-attack");
+    missedCells.forEach((cell) => cell.classList.remove("missed-attack"));
 };
 
 export {
