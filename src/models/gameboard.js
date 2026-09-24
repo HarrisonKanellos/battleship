@@ -26,6 +26,7 @@ export function createGameboard() {
         if (!shipNameExists(shipName, gbState)) {
             throw new Error("Ship name must exist in ships array.");
         }
+
         if (
             !validCoordinatesArrLength(shipName, coordinatesArr.length, gbState)
         ) {
@@ -33,14 +34,17 @@ export function createGameboard() {
                 "Length of coordinates array must be equal to length of ship.",
             );
         }
+
         if (!coordinatesInRange(coordinatesArr)) {
             throw new RangeError(
                 "Coordinate must have one letter (A-J) and one number (1-10)",
             );
         }
+
         if (!coordinatesInLine(coordinatesArr)) {
             throw new Error("Coordinates must be in straight line.");
         }
+
         if (coordinatesOccupied(coordinatesArr, gbState)) {
             throw new Error("Coordinates are occupied by another ship.");
         }
@@ -56,6 +60,7 @@ export function createGameboard() {
                 "Coordinate must have one letter (A-J) and one number (1-10)",
             );
         }
+
         if (duplicateAttack(coordinate, gbState)) {
             throw new Error("Coordinate has already been attacked.");
         }
@@ -66,6 +71,7 @@ export function createGameboard() {
                 return;
             }
         }
+
         gbState.missedAttacks.push(coordinate);
     };
 
@@ -76,6 +82,7 @@ export function createGameboard() {
                 hitCoordinates.push(coordinate),
             );
         });
+
         return hitCoordinates;
     };
 
@@ -95,7 +102,25 @@ export function createGameboard() {
 
             positions[ship.getName()] = { coordinates, orientation };
         }
+
         return positions;
+    };
+
+    const getShipNameAtCoordinate = (coordinate) => {
+        let shipName = null;
+        for (const ship of gbState.ships) {
+            if (ship.getCoordinates().includes(coordinate)) {
+                shipName = ship.getName();
+            }
+        }
+
+        return shipName;
+    };
+
+    const shipIsSunk = (shipName) => {
+        return gbState.ships
+            .find((ship) => ship.getName() === shipName)
+            .isSunk();
     };
 
     return {
@@ -104,8 +129,9 @@ export function createGameboard() {
         receiveAttack,
         getHitCoordinates,
         getMisses,
-        coordinateAlreadyAttacked,
         allSunk,
         getShipPositions,
+        getShipNameAtCoordinate,
+        shipIsSunk,
     };
 }
