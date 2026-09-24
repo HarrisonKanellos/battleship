@@ -26,6 +26,6 @@ const showPlayGame = () => {
     playGame(players, handleGameOver);
 };
 
-const handleGameOver = () => {
+const handleGameOver = (winner) => {
     // TODO: Game ends logic - prompt to play again
 };

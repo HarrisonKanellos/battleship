@@ -1,7 +1,5 @@
 import * as Display from "../views/display.js";
 
-import { testSetCoordinates, testHitCoordinates } from "./testPlayGame.js"; // TEMP
-
 let realPlayer, computerPlayer;
 let onGameWinner;
 let activePlayer = realPlayer;
@@ -11,7 +9,7 @@ export const playGame = (playersReference, onGameWinnerCallback) => {
     onGameWinner = onGameWinnerCallback;
 
     renderScene();
-    initPlayGameEvents();
+    initRealPlayerClickAttack();
 };
 
 const renderScene = () => {
@@ -30,18 +28,21 @@ const renderScene = () => {
     );
 };
 
-const initPlayGameEvents = () => {
+const initRealPlayerClickAttack = () => {
     const enemyGameboard = document.querySelector(".enemy-gameboard");
-
     enemyGameboard.addEventListener("click", handleClickAttack);
+};
+
+const removeRealPlayerClickAttack = () => {
+    const enemyGameboard = document.querySelector(".enemy-gameboard");
+    enemyGameboard.removeEventListener("click", handleClickAttack);
 };
 
 const handleClickAttack = (event) => {
     const target = event.target;
-
-    const isCell = target.classList.contains(".cell");
     const isRealPlayersTurn = activePlayer === realPlayer;
-    if (!isCell || !isRealPlayersTurn) {
+    const isCell = target.classList.contains("cell");
+    if (!isRealPlayersTurn || !isCell) {
         return;
     }
 
@@ -54,13 +55,19 @@ const handleClickAttack = (event) => {
     // TODO: render enemy gameboard state
     // TODO: render enemy ships list state
 
+    const isGameWinner = checkGameWinner(realPlayer);
+    if (isGameWinner) {
+        removeRealPlayerClickAttack();
+        onGameWinner(realPlayer);
+        return;
+    }
+
     activePlayer = computerPlayer;
     handleComputerPlayerAttack();
 };
 
 const handleComputerPlayerAttack = () => {
     const coordinate = computerPlayer.actions.getNewAttack();
-
     const isSuccessfulAttack = handlePlayerAttack(computerPlayer, coordinate);
     if (!isSuccessfulAttack) {
         // Attack again if attack fails
@@ -84,8 +91,19 @@ const handleComputerPlayerAttack = () => {
         }
     }
 
-    setRecentAttack(isHit, coordinate, sunkShip);
+    computerPlayer.actions.setRecentAttack(isHit, coordinate, sunkShip);
     computerPlayer.actions.addCompletedAttack(coordinate);
+
+    // TODO: render realPlayer gameboard state
+    // TODO: render realPlayer ships list state
+
+    const isGameWinner = checkGameWinner(computerPlayer);
+    if (isGameWinner) {
+        removeRealPlayerClickAttack();
+        onGameWinner(computerPlayer);
+        return;
+    }
+
     activePlayer = realPlayer;
 };
 
@@ -99,4 +117,15 @@ const handlePlayerAttack = (player, coordinate) => {
         return false;
     }
     return true;
+};
+
+const checkGameWinner = (player) => {
+    let isGameWinner;
+    if (player === realPlayer) {
+        isGameWinner = computerPlayer.gameboard.allSunk();
+    } else if (player === computerPlayer) {
+        isGameWinner = realPlayer.gameboard.allSunk();
+    }
+
+    return isGameWinner;
 };
