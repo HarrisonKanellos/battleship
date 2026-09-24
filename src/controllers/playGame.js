@@ -2,11 +2,12 @@ import * as Display from "../views/display.js";
 
 let realPlayer, computerPlayer;
 let onGameWinner;
-let activePlayer = realPlayer;
+let activePlayer;
 
 export const playGame = (playersReference, onGameWinnerCallback) => {
     ({ realPlayer, computerPlayer } = playersReference);
     onGameWinner = onGameWinnerCallback;
+    activePlayer = realPlayer;
 
     renderScene();
     initRealPlayerClickAttack();
