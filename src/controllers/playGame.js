@@ -11,6 +11,7 @@ export const playGame = (playersReference, onGameWinnerCallback) => {
     onGameWinner = onGameWinnerCallback;
 
     renderScene();
+    initPlayGameEvents();
 };
 
 const renderScene = () => {
@@ -52,6 +53,40 @@ const handleClickAttack = (event) => {
 
     // TODO: render enemy gameboard state
     // TODO: render enemy ships list state
+
+    activePlayer = computerPlayer;
+    handleComputerPlayerAttack();
+};
+
+const handleComputerPlayerAttack = () => {
+    const coordinate = computerPlayer.actions.getNewAttack();
+
+    const isSuccessfulAttack = handlePlayerAttack(computerPlayer, coordinate);
+    if (!isSuccessfulAttack) {
+        // Attack again if attack fails
+        handleComputerPlayerAttack();
+        return;
+    }
+
+    let sunkShip;
+    const isHit = realPlayer.gameboard.getHitCoordinates().includes(coordinate);
+    if (!isHit) {
+        sunkShip = false;
+    } else {
+        const shipNameAtCoordinate =
+            realPlayer.gameboard.getShipNameAtCoordinate(coordinate);
+        const shipIsSunk =
+            realPlayer.gameboard.shipIsSunk(shipNameAtCoordinate);
+        if (shipIsSunk) {
+            sunkShip = true;
+        } else {
+            sunkShip = false;
+        }
+    }
+
+    setRecentAttack(isHit, coordinate, sunkShip);
+    computerPlayer.actions.addCompletedAttack(coordinate);
+    activePlayer = realPlayer;
 };
 
 const handlePlayerAttack = (player, coordinate) => {
