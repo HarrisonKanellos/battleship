@@ -153,7 +153,7 @@ const getRandomPlacement = (length) => {
                 --rowNum;
                 newCoordinate = columnChar.concat(rowNum);
             }
-            
+
             return newCoordinate;
         });
 

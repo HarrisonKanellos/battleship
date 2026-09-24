@@ -22,7 +22,7 @@ function createRealPlayer(name) {
 function createComputerPlayer() {
     const { gameboard } = createPlayer();
     const actions = defineActions();
-    
+
     return {
         gameboard,
         actions,

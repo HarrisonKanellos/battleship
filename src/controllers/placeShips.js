@@ -1,6 +1,6 @@
 import * as Display from "../views/display.js";
 
-let player;
+let realPlayer, computerPlayer;
 let onShipsPlaced;
 let draggedShipImage = null;
 
@@ -12,12 +12,51 @@ const droppedShipCoordinates = {
     "patrol boat": null,
 };
 
-export const placeShips = (playerReference, onShipsPlacedCallback) => {
-    player = playerReference;
+export const placeShips = (playersReference, onShipsPlacedCallback) => {
+    ({ realPlayer, computerPlayer } = playersReference);
     onShipsPlaced = onShipsPlacedCallback;
 
+    placeComputerPlayerShips();
     Display.renderPlaceShipsScene();
     initPlaceShipsEvents();
+};
+
+const placeComputerPlayerShips = () => {
+    const shipLengths = {
+        carrier: 5,
+        battleship: 4,
+        destroyer: 3,
+        submarine: 3,
+        "patrol boat": 2,
+    };
+
+    for (const ship in shipLengths) {
+        let isValidPlacement = false;
+        while (!isValidPlacement) {
+            const coordinates = computerPlayer.actions.getRandomPlacement(
+                shipLengths[ship],
+            );
+            try {
+                computerPlayer.gameboard.setCoordinatesOf(ship, coordinates);
+            } catch (error) {
+                if (
+                    error.message ===
+                    "Coordinates are occupied by another ship."
+                ) {
+                    continue;
+                } else {
+                    console.error(error);
+                }
+            }
+
+            // If no error thrown due to coordinates being occupied
+            // Coordinates are successfully set
+            isValidPlacement = true;
+        }
+    }
+
+    const placements = computerPlayer.gameboard.getShipPositions();
+    console.log(placements);
 };
 
 const initPlaceShipsEvents = () => {
@@ -304,7 +343,7 @@ const handleButtonClick = (event) => {
         }
 
         for (const ship in droppedShipCoordinates) {
-            player.gameboard.setCoordinatesOf(
+            realPlayer.gameboard.setCoordinatesOf(
                 ship,
                 droppedShipCoordinates[ship],
             );

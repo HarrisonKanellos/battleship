@@ -19,7 +19,7 @@ export const startGame = () => {
 };
 
 const showPlaceShips = () => {
-    placeShips(players.realPlayer, showPlayGame);
+    placeShips(players, showPlayGame);
 };
 
 const showPlayGame = () => {
