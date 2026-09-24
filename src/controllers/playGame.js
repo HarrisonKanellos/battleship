@@ -95,7 +95,12 @@ const handleComputerPlayerAttack = () => {
     computerPlayer.actions.setRecentAttack(isHit, coordinate, sunkShip);
     computerPlayer.actions.addCompletedAttack(coordinate);
 
-    // TODO: render realPlayer gameboard state
+    Display.renderPlayerGameboardState(
+        document.querySelector(".player-gameboard"),
+        realPlayer.gameboard.getShipPositions(),
+        realPlayer.gameboard.getHitCoordinates(),
+        realPlayer.gameboard.getMisses(),
+    );
     // TODO: render realPlayer ships list state
 
     const isGameWinner = checkGameWinner(computerPlayer);
