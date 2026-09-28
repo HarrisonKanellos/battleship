@@ -264,7 +264,7 @@ main {
     }
 }
 
-/* || Game Scene */
+/* || Play Game Scene */
 .game-scene-wrapper {
     display: grid;
     grid-template-rows: 1fr;
@@ -273,6 +273,14 @@ main {
 
     margin: 0 auto;
     width: 80%;
+}
+
+.enemy-gameboard .hit-attack {
+    background-color: orange;
+}
+
+.enemy-gameboard .missed-attack {
+    background-color: grey;
 }
 
 /* Hit attack on players gameboard cell */

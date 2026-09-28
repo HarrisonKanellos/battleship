@@ -53,7 +53,12 @@ const handleClickAttack = (event) => {
         return;
     }
 
-    // TODO: render enemy gameboard state
+    Display.renderEnemyPlayerGameboardState(
+        document.querySelector(".enemy-gameboard"),
+        computerPlayer.gameboard.getShipStates(),
+        computerPlayer.gameboard.getHitCoordinates(),
+        computerPlayer.gameboard.getMisses(),
+    );
     // TODO: render enemy ships list state
 
     const isGameWinner = checkGameWinner(realPlayer);
@@ -114,8 +119,11 @@ const handleComputerPlayerAttack = () => {
 };
 
 const handlePlayerAttack = (player, coordinate) => {
+    const receivingPlayer = player === realPlayer
+        ? computerPlayer
+        : realPlayer;
     try {
-        player.gameboard.receiveAttack(coordinate);
+        receivingPlayer.gameboard.receiveAttack(coordinate);
     } catch (error) {
         if (error instanceof RangeError) {
             console.error(error);

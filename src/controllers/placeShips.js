@@ -54,9 +54,6 @@ const placeComputerPlayerShips = () => {
             isValidPlacement = true;
         }
     }
-
-    const placements = computerPlayer.gameboard.getShipPositions();
-    console.log(placements);
 };
 
 const initPlaceShipsEvents = () => {
