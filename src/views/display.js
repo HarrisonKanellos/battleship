@@ -250,19 +250,7 @@ const renderPlayerGameboardState = (
 
     // Display ships
     for (const ship in shipPositions) {
-        const firstCoordinate = shipPositions[ship].coordinates[0];
-        const firstCoordinateCell = gameboard.querySelector(
-            `[data-coordinate="${firstCoordinate}"]`,
-        );
-
-        const shipImage = document.createElement("img");
-        shipImage.classList.add("ship-image", `${formatClassName(ship)}-image`);
-        if (shipPositions[ship].orientation === "vertical") {
-            shipImage.classList.add("vertical");
-        }
-        shipImage.src = shipImages[ship];
-
-        firstCoordinateCell.appendChild(shipImage);
+        displayShipOnBoard(gameboard, ship, shipPositions[ship]);
     }
 
     // Display hits
@@ -273,6 +261,38 @@ const renderPlayerGameboardState = (
         coordinateCell.classList.add("hit-attack");
     }
 
+    // Display misses
+    for (const coordinate of missedAttacks) {
+        const coordinateCell = gameboard.querySelector(
+            `[data-coordinate="${coordinate}"]`,
+        );
+        coordinateCell.classList.add("missed-attack");
+    }
+};
+
+const renderEnemyPlayerGameboardState = (
+    gameboard,
+    shipStates,
+    hitCoordinates,
+    missedAttacks,
+) => {
+    clearPlayerGameboard(gameboard);
+    
+    // Display sunk ships
+    for (const ship in shipStates) {
+        if (shipStates[ship].isSunk) {
+            displayShipOnBoard(gameboard, ship, shipStates[ship]);
+        }
+    }
+    
+    // Display hits
+    for (const coordinate of hitCoordinates) {
+        const coordinateCell = gameboard.querySelector(
+            `[data-coordinate="${coordinate}"]`,
+        );
+        coordinateCell.classList.add("hit-attack");
+    }
+    
     // Display misses
     for (const coordinate of missedAttacks) {
         const coordinateCell = gameboard.querySelector(
@@ -300,11 +320,28 @@ const clearPlayerGameboard = (gameboard) => {
     missedCells.forEach((cell) => cell.classList.remove("missed-attack"));
 };
 
+const displayShipOnBoard = (gameboard, shipName, shipProperties) => {
+    const firstCoordinate = shipProperties.coordinates[0];
+    const firstCoordinateCell = gameboard.querySelector(
+        `[data-coordinate="${firstCoordinate}"]`,
+    );
+
+    const shipImage = document.createElement("img");
+    shipImage.classList.add("ship-image", `${formatClassName(shipName)}-image`);
+    if (shipProperties.orientation === "vertical") {
+        shipImage.classList.add("vertical");
+    }
+    shipImage.src = shipImages[shipName];
+
+    firstCoordinateCell.appendChild(shipImage);
+};
+
 export {
     renderPlaceShipsScene,
     resetShipPlacements,
     renderGameScene,
     renderPlayerGameboardState,
+    renderEnemyPlayerGameboardState,
     isValidPlacement,
     getShipOverCoordinates,
     addClassToCoordinates,
