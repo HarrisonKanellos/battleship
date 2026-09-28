@@ -106,6 +106,19 @@ export function createGameboard() {
         return positions;
     };
 
+    const getShipStates = () => {
+        const shipStates = {};
+        for (const ship of gbState.ships) {
+            const coordinates = ship.getCoordinates();
+            const orientation = ship.getOrientation();
+            const isSunk = ship.isSunk();
+
+            shipStates[ship.getName()] = { coordinates, orientation, isSunk };
+        }
+
+        return shipStates;
+    };
+
     const getShipNameAtCoordinate = (coordinate) => {
         let shipName = null;
         for (const ship of gbState.ships) {
@@ -131,6 +144,7 @@ export function createGameboard() {
         getMisses,
         allSunk,
         getShipPositions,
+        getShipStates,
         getShipNameAtCoordinate,
         shipIsSunk,
     };
