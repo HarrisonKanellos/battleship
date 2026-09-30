@@ -290,5 +290,5 @@ main {
 
 /* Missed attack on players gameboard cell */
 .player-gameboard .missed-attack {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: grey;
 }

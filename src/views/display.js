@@ -90,43 +90,46 @@ const renderDraggableShips = () => {
 
     // Ship images and captions
     for (const ship in shipImages) {
-        const shipWrapper = document.createElement("figure");
-        shipWrapper.classList.add("ship-wrapper");
-
-        const imageWrapper = document.createElement("div");
-        imageWrapper.classList.add("image-wrapper");
-        imageWrapper.dataset.forShipName = ship;
-
-        const shipImage = document.createElement("img");
-        shipImage.classList.add(
-            "ship-image",
-            `${formatClassName(ship)}-image`,
-            "horizontal",
-        );
-        shipImage.src = shipImages[ship];
-        shipImage.draggable = true;
-        shipImage.dataset.length = shipLengths[ship];
-        shipImage.dataset.shipName = ship;
-
-        const divLine = document.createElement("div");
-        divLine.classList.add("divider");
-
-        const shipCaption = document.createElement("figcaption");
-        shipCaption.textContent = capitalizeName(ship);
-
-        imageWrapper.appendChild(shipImage);
-
-        shipWrapper.appendChild(imageWrapper);
-        shipWrapper.appendChild(divLine);
-        shipWrapper.appendChild(shipCaption);
-
-        shipsContainer.appendChild(shipWrapper);
+        renderDraggableShipWrapper(shipsContainer, ship);
     }
 
     shipsWrapper.appendChild(shipsHeading);
     shipsWrapper.appendChild(shipsContainer);
 
     return shipsWrapper;
+};
+
+const renderDraggableShipWrapper = (shipsContainer, ship) => {
+    const shipWrapper = document.createElement("figure");
+    shipWrapper.classList.add("ship-wrapper");
+
+    const imageWrapper = document.createElement("div");
+    imageWrapper.classList.add("image-wrapper");
+    imageWrapper.dataset.forShipName = ship;
+
+    const shipImage = document.createElement("img");
+    shipImage.classList.add(
+        "ship-image",
+        "horizontal",
+    );
+    shipImage.src = shipImages[ship];
+    shipImage.draggable = true;
+    shipImage.dataset.length = shipLengths[ship];
+    shipImage.dataset.shipName = ship;
+
+    const divLine = document.createElement("div");
+    divLine.classList.add("divider");
+
+    const shipCaption = document.createElement("figcaption");
+    shipCaption.textContent = capitalizeName(ship);
+
+    imageWrapper.appendChild(shipImage);
+
+    shipWrapper.appendChild(imageWrapper);
+    shipWrapper.appendChild(divLine);
+    shipWrapper.appendChild(shipCaption);
+
+    shipsContainer.appendChild(shipWrapper);
 };
 
 const renderMessage = () => {
@@ -240,6 +243,8 @@ const renderGameboardCells = (gameboard) => {
     }
 };
 
+
+
 const renderPlayerGameboardState = (
     gameboard,
     shipPositions,
@@ -258,6 +263,7 @@ const renderPlayerGameboardState = (
         const coordinateCell = gameboard.querySelector(
             `[data-coordinate="${coordinate}"]`,
         );
+        // TODO: append cross image for miss
         coordinateCell.classList.add("hit-attack");
     }
 
