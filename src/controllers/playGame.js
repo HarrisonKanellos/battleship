@@ -97,8 +97,7 @@ const handleComputerPlayerAttack = () => {
         }
     }
 
-    computerPlayer.actions.setRecentAttack(isHit, coordinate, sunkShip);
-    computerPlayer.actions.addCompletedAttack(coordinate);
+    computerPlayer.actions.setLastAttack(isHit, coordinate, sunkShip);
 
     Display.renderPlayerGameboardState(
         document.querySelector(".player-gameboard"),
@@ -119,9 +118,7 @@ const handleComputerPlayerAttack = () => {
 };
 
 const handlePlayerAttack = (player, coordinate) => {
-    const receivingPlayer = player === realPlayer
-        ? computerPlayer
-        : realPlayer;
+    const receivingPlayer = player === realPlayer ? computerPlayer : realPlayer;
     try {
         receivingPlayer.gameboard.receiveAttack(coordinate);
     } catch (error) {

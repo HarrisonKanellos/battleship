@@ -277,14 +277,14 @@ const renderEnemyPlayerGameboardState = (
     missedAttacks,
 ) => {
     clearPlayerGameboard(gameboard);
-    
+
     // Display sunk ships
     for (const ship in shipStates) {
         if (shipStates[ship].isSunk) {
             displayShipOnBoard(gameboard, ship, shipStates[ship]);
         }
     }
-    
+
     // Display hits
     for (const coordinate of hitCoordinates) {
         const coordinateCell = gameboard.querySelector(
@@ -292,7 +292,7 @@ const renderEnemyPlayerGameboardState = (
         );
         coordinateCell.classList.add("hit-attack");
     }
-    
+
     // Display misses
     for (const coordinate of missedAttacks) {
         const coordinateCell = gameboard.querySelector(

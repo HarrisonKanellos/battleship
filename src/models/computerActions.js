@@ -1,65 +1,83 @@
 import { coordinatesInRange } from "../helpers/gameboardChecks.js";
 
 const previousAttacks = [];
-const recentAttack = {
+const lastAttack = {
     isHit: null,
     coordinate: null,
     sunkShip: null,
 };
+const recentHitAttacks = [];
 
 export const defineActions = () => {
     return {
         getRandomPlacement,
-        addCompletedAttack,
-        setRecentAttack,
+        setLastAttack,
         getNewAttack,
     };
 };
 
-const addCompletedAttack = (coordinate) => {
+const setLastAttack = (isHit, coordinate, sunkShip) => {
+    // Track all previous attacks
     previousAttacks.push(coordinate);
-};
 
-const setRecentAttack = (isHit, coordinate, sunkShip) => {
-    // Keep the most recent hit after an adjacent miss
+    if (sunkShip) {
+        // Remove recent hit attacks after sinking ship
+        recentHitAttacks.length = 0;
+    } else if (isHit) {
+        // Keep track of all hits on a ship
+        recentHitAttacks.push(coordinate);
+    }
+
+    // Keep the previous lastAttack after an adjacent/inline miss
     // Ensures computer keeps targeting ship until it is sunk
-    if (recentAttack.isHit && !isHit) {
+    if (lastAttack.isHit && !isHit) {
         return;
     }
 
-    recentAttack.isHit = isHit;
-    recentAttack.coordinate = coordinate;
-    recentAttack.sunkShip = sunkShip;
+    lastAttack.isHit = isHit;
+    lastAttack.coordinate = coordinate;
+    lastAttack.sunkShip = sunkShip;
 };
 
 const getNewAttack = () => {
     let newAttackCoordinate;
     let isUniqueAttack = false;
-    const usedAdjacentDirections = [];
+    const usedDirections = [];
 
     do {
-        if (recentAttack.isHit && !recentAttack.sunkShip) {
-            // Target adjacent to recent hit if ship hasn't been sunk
-            newAttackCoordinate = getAdjacentCoordinate(
-                recentAttack.coordinate,
-                usedAdjacentDirections,
-            );
-            if (previousAttacks.includes(newAttackCoordinate)) {
-                const direction = getDirectionFromCoordinates(
-                    recentAttack.coordinate,
-                    newAttackCoordinate,
-                );
-                usedAdjacentDirections.push(direction);
-            } else {
-                isUniqueAttack = true;
-            }
-        } else {
+        if (!lastAttack.isHit || lastAttack.sunkShip) {
             // Target random coordinate if recent attack missed or sunk ship
             newAttackCoordinate = getRandomCoordinate();
-            if (!previousAttacks.includes(newAttackCoordinate)) {
-                isUniqueAttack = true;
+        } else if (recentHitAttacks.length === 1) {
+            // Target adjacent to recent hit if ship has been hit only once
+            newAttackCoordinate = getAdjacentCoordinate(
+                lastAttack.coordinate,
+                usedDirections,
+            );
+
+            // If unable to get adjacent coordinate, get random instead
+            if (!newAttackCoordinate) {
+                newAttackCoordinate = getRandomCoordinate();
+
+                // Ensure next attack attacks random coordinate
+                recentHitAttacks.length = 0;
+                lastAttack.isHit = false;
+            }
+        } else {
+            // Target inline of other hits to ship
+            newAttackCoordinate = getInlineCoordinate(usedDirections);
+
+            // If unable to get valid inline coordinate, get random instead
+            if (!newAttackCoordinate) {
+                newAttackCoordinate = getRandomCoordinate();
+
+                // Ensure next attack attacks random coordinate
+                recentHitAttacks.length = 0;
+                lastAttack.isHit = false;
             }
         }
+
+        isUniqueAttack = !previousAttacks.includes(newAttackCoordinate);
     } while (!isUniqueAttack);
 
     return newAttackCoordinate;
@@ -76,7 +94,11 @@ const getRandomCoordinate = () => {
     return randomCoordinate;
 };
 
-const getAdjacentCoordinate = (coordinate, usedDirections = []) => {
+const getAdjacentCoordinate = (coordinate, usedDirections) => {
+    if (usedDirections.length === 4) {
+        return null;
+    }
+
     let randomDirection;
     let isUniqueDirection = false;
     do {
@@ -110,6 +132,53 @@ const getAdjacentCoordinate = (coordinate, usedDirections = []) => {
     }
 
     return getAdjacentCoordinate(coordinate, usedDirections);
+};
+
+const getInlineCoordinate = (usedDirections) => {
+    while (usedDirections.length < 2) {
+        let direction, outsideCoordinate;
+        if (usedDirections.length === 0) {
+            // Get direction using last 2 hit coordinates
+            direction = getDirectionFromCoordinates(
+                recentHitAttacks.at(-2),
+                recentHitAttacks.at(-1),
+            );
+            outsideCoordinate = recentHitAttacks.at(-1);
+        } else {
+            // Get direction using first 2 hit coordinates
+            direction = getDirectionFromCoordinates(
+                recentHitAttacks[1],
+                recentHitAttacks[0],
+            );
+            outsideCoordinate = recentHitAttacks[0];
+        }
+
+        let columnCharCode = outsideCoordinate.at(0).charCodeAt(0);
+        let rowNum = outsideCoordinate.slice(1);
+        switch (direction) {
+            case "up":
+                rowNum--;
+                break;
+            case "right":
+                columnCharCode++;
+                break;
+            case "down":
+                rowNum++;
+                break;
+            case "left":
+                columnCharCode--;
+        }
+
+        const inlineCoordinate =
+            String.fromCharCode(columnCharCode).concat(rowNum);
+        const directionFailed = !coordinatesInRange([inlineCoordinate]);
+        usedDirections.push(direction);
+        if (!directionFailed) {
+            return inlineCoordinate;
+        }
+    }
+
+    return null;
 };
 
 const getRandomPlacement = (length) => {
@@ -187,11 +256,11 @@ const getDirectionFromCoordinates = (baseCoordinate, adjacentCoordinate) => {
     const adjacentColumnCharCode = adjacentCoordinate.at(0).charCodeAt(0);
     const adjacentRowNum = Number(adjacentCoordinate.slice(1));
 
-    if (baseRowNum < adjacentRowNum) {
+    if (baseRowNum > adjacentRowNum) {
         return "up";
     } else if (baseColumnCharCode < adjacentColumnCharCode) {
         return "right";
-    } else if (baseRowNum > adjacentRowNum) {
+    } else if (baseRowNum < adjacentRowNum) {
         return "down";
     } else {
         return "left";
