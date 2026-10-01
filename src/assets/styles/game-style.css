@@ -53,37 +53,37 @@ main {
 
     border: 5px solid black;
 
-    & .ship-image {
+    .ship-image {
         position: relative;
-        z-index: -1;
+        z-index: 1;
     }
 
     /* Calculated ship lengths */
-    & .carrier-image {
+    .carrier-image {
         width: calc(
             100% * var(--carrier-length) + (var(--carrier-length) - 1) *
                 var(--cell-border-width)
         );
     }
-    & .battleship-image {
+    .battleship-image {
         width: calc(
             100% * var(--battleship-length) + (var(--battleship-length) - 1) *
                 var(--cell-border-width)
         );
     }
-    & .destroyer-image {
+    .destroyer-image {
         width: calc(
             100% * var(--destroyer-length) + (var(--destroyer-length) - 1) *
                 var(--cell-border-width)
         );
     }
-    & .submarine-image {
+    .submarine-image {
         width: calc(
             100% * var(--submarine-length) + (var(--submarine-length) - 1) *
                 var(--cell-border-width)
         );
     }
-    & .patrol-boat-image {
+    .patrol-boat-image {
         width: calc(
             100% * var(--patrol-boat-length) + (var(--patrol-boat-length) - 1) *
                 var(--cell-border-width)
@@ -117,22 +117,22 @@ main {
     margin: 0 auto;
     padding: 60px 200px 0;
 
-    & .gameboard-wrapper {
+    .gameboard-wrapper {
         grid-area: 1 / 1 / 2 / 2;
     }
 
-    & .gameboard {
+    .gameboard {
         grid-template-rows: repeat(10, 69px);
         grid-template-columns: repeat(10, 69px);
     }
 
-    & .ship-image {
+    .ship-image {
         cursor: pointer;
     }
 
     /* Moves custom vertical drag image off page
        Ensures width is equal to that of rotated ship */
-    & .vertical-drag-image-wrapper {
+    .vertical-drag-image-wrapper {
         position: absolute;
         top: 0;
         left: -9900px;
@@ -141,19 +141,19 @@ main {
     }
 
     /* Calculated ship lengths */
-    & .carrier-image {
+    .carrier-image {
         width: calc(var(--cell-size) * var(--carrier-length) - 10px);
     }
-    & .battleship-image {
+    .battleship-image {
         width: calc(var(--cell-size) * var(--battleship-length));
     }
-    & .destroyer-image {
+    .destroyer-image {
         width: calc(var(--cell-size) * var(--destroyer-length));
     }
-    & .submarine-image {
+    .submarine-image {
         width: calc(var(--cell-size) * var(--submarine-length));
     }
-    & .patrol-boat-image {
+    .patrol-boat-image {
         width: calc(var(--cell-size) * var(--patrol-boat-length));
     }
 }
