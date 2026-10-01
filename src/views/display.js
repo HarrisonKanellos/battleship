@@ -64,10 +64,10 @@ const renderGameScene = () => {
     const gameSceneWrapper = document.createElement("div");
     gameSceneWrapper.classList.add("game-scene-wrapper");
 
-    const enemyShipsWrapper = renderShipsList("enemy");
+    const enemyShipsWrapper = renderShipStatuses("enemy");
     const enemyGameboardWrapper = renderGameboard("enemy");
     const playerGameboardWrapper = renderGameboard("player");
-    const playerShipsWrapper = renderShipsList("player");
+    const playerShipsWrapper = renderShipStatuses("player");
 
     gameSceneWrapper.appendChild(enemyShipsWrapper);
     gameSceneWrapper.appendChild(enemyGameboardWrapper);
@@ -90,7 +90,8 @@ const renderDraggableShips = () => {
 
     // Ship images and captions
     for (const ship in shipImages) {
-        renderDraggableShipWrapper(shipsContainer, ship);
+        const shipWrapper = renderDraggableShipWrapper(ship);
+        shipsContainer.appendChild(shipWrapper);
     }
 
     shipsWrapper.appendChild(shipsHeading);
@@ -99,7 +100,7 @@ const renderDraggableShips = () => {
     return shipsWrapper;
 };
 
-const renderDraggableShipWrapper = (shipsContainer, ship) => {
+const renderDraggableShipWrapper = (ship) => {
     const shipWrapper = document.createElement("figure");
     shipWrapper.classList.add("ship-wrapper");
 
@@ -110,6 +111,7 @@ const renderDraggableShipWrapper = (shipsContainer, ship) => {
     const shipImage = document.createElement("img");
     shipImage.classList.add(
         "ship-image",
+        `${formatClassName(ship)}-image`,
         "horizontal",
     );
     shipImage.src = shipImages[ship];
@@ -129,7 +131,7 @@ const renderDraggableShipWrapper = (shipsContainer, ship) => {
     shipWrapper.appendChild(divLine);
     shipWrapper.appendChild(shipCaption);
 
-    shipsContainer.appendChild(shipWrapper);
+    return shipWrapper;
 };
 
 const renderMessage = () => {
@@ -188,10 +190,10 @@ const resetShipPlacements = () => {
     droppedCells.forEach((cell) => cell.classList.remove("dropped"));
 };
 
-const renderShipsList = (playerType) => {
+const renderShipStatuses = (playerType) => {
     const shipsWrapper = document.createElement("div");
     shipsWrapper.classList.add(
-        "ships-list-wrapper",
+        "ship-statuses-wrapper",
         `${playerType}-ships-wrapper`,
     );
 
@@ -204,12 +206,65 @@ const renderShipsList = (playerType) => {
         `${playerType}-ships-conatiner`,
     );
 
-    // Render ships status list
+    for (const ship in shipImages) {
+        if (playerType === "player") {
+            const shipWrapper = renderPlayerShipStatusWrapper(ship);
+            shipsContainer.appendChild(shipWrapper)
+        } else if (playerType === "enemy") {
+            const shipWrapper = renderEnemyShipStatusWrapper(ship);
+            shipsContainer.appendChild(shipWrapper);
+        }
+    }
 
     shipsWrapper.appendChild(shipsHeading);
     shipsWrapper.appendChild(shipsContainer);
 
     return shipsWrapper;
+};
+
+const renderPlayerShipStatusWrapper = (ship) => {
+    const shipWrapper = document.createElement("figure");
+    shipWrapper.classList.add("ship-wrapper");
+
+    // Create cells equal to length of ship
+    for (let i = 0; i < shipLengths[ship]; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        shipWrapper.appendChild(cell);
+    }
+
+    const shipImage = document.createElement("img");
+    shipImage.classList.add(
+        "ship-image",
+        `${formatClassName(ship)}-image`,
+        "horizontal",
+    );
+    shipImage.src = shipImages[ship];
+    shipImage.dataset.length = shipLengths[ship];
+    shipImage.dataset.shipName = ship;
+
+    shipWrapper.firstChild.appendChild(shipImage);
+
+    return shipWrapper;
+};
+
+const renderEnemyShipStatusWrapper = (ship) => {
+    const shipWrapper = document.createElement("figure");
+    shipWrapper.classList.add("ship-wrapper");
+
+    const shipImage = document.createElement("img");
+    shipImage.classList.add(
+        "ship-image",
+        `${formatClassName(ship)}-image`,
+        "horizontal",
+    );
+    shipImage.src = shipImages[ship];
+    shipImage.dataset.length = shipLengths[ship];
+    shipImage.dataset.shipName = ship;
+
+    shipWrapper.appendChild(shipImage);
+
+    return shipWrapper;
 };
 
 const renderGameboard = (playerType) => {
@@ -242,8 +297,6 @@ const renderGameboardCells = (gameboard) => {
         }
     }
 };
-
-
 
 const renderPlayerGameboardState = (
     gameboard,
