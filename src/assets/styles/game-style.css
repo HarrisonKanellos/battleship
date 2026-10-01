@@ -53,6 +53,11 @@ main {
 
     border: 5px solid black;
 
+    & .ship-image {
+        position: relative;
+        z-index: -1;
+    }
+
     /* Calculated ship lengths */
     & .carrier-image {
         width: calc(
@@ -122,9 +127,6 @@ main {
     }
 
     & .ship-image {
-        position: relative;
-        z-index: 1;
-
         cursor: pointer;
     }
 
@@ -276,7 +278,7 @@ main {
 }
 
 .enemy-gameboard .hit-attack {
-    background-color: orange;
+    background-color: rgba(255, 0, 0, 0.6);
 }
 
 .enemy-gameboard .missed-attack {
