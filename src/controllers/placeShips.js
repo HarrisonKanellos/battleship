@@ -81,43 +81,46 @@ const initPlaceShipsEvents = () => {
    Sets drag image and drag effect */
 const handleDragStartShip = (event) => {
     const target = event.target;
-    if (target.classList.contains("ship-image")) {
-        /* Create a custom drag image for vertical ships
-           Image offset points to center of first cell occupied by ship */
-        if (target.classList.contains("vertical")) {
-            const verticalDragImageWrapper = document.createElement("div");
-            const verticalDragImage = target.cloneNode();
-            const placeShipsSceneWrapper = document.querySelector(
-                ".place-ships-scene-wrapper",
-            );
 
-            verticalDragImageWrapper.classList.add(
-                "vertical-drag-image-wrapper",
-            );
+    if (!target.classList.contains("ship-image")) {
+        return;
+    }
+    
+    /* Create a custom drag image for vertical ships
+        Image offset points to center of first cell occupied by ship */
+    if (target.classList.contains("vertical")) {
+        const verticalDragImageWrapper = document.createElement("div");
+        const verticalDragImage = target.cloneNode();
+        const placeShipsSceneWrapper = document.querySelector(
+            ".place-ships-scene-wrapper",
+        );
 
-            verticalDragImageWrapper.appendChild(verticalDragImage);
-            placeShipsSceneWrapper.appendChild(verticalDragImageWrapper);
+        verticalDragImageWrapper.classList.add(
+            "vertical-drag-image-wrapper",
+        );
 
-            event.dataTransfer.setDragImage(verticalDragImageWrapper, 35, 35);
-        } else {
-            event.dataTransfer.setDragImage(target, 35, 35);
-        }
-        event.dataTransfer.effectAllowed = "move";
-        draggedShipImage = target;
+        verticalDragImageWrapper.appendChild(verticalDragImage);
+        placeShipsSceneWrapper.appendChild(verticalDragImageWrapper);
 
-        /* If ship was previously dropped on gameboard
-           remove it's cells dropped classes */
-        const shipName = target.dataset.shipName;
-        if (droppedShipCoordinates[shipName]) {
-            const gameboard = document.querySelector(".gameboard");
+        event.dataTransfer.setDragImage(verticalDragImageWrapper, 35, 35);
+    } else {
+        event.dataTransfer.setDragImage(target, 35, 35);
+    }
+    event.dataTransfer.effectAllowed = "move";
+    draggedShipImage = target;
 
-            // Remove previous dropped coordinates while dragging
-            Display.removeClassFromCoordinates(
-                gameboard,
-                droppedShipCoordinates[shipName],
-                "dropped",
-            );
-        }
+    /* If ship was previously dropped on gameboard
+        remove it's cells dropped classes */
+    const shipName = target.dataset.shipName;
+    if (droppedShipCoordinates[shipName]) {
+        const gameboard = document.querySelector(".gameboard");
+
+        // Remove previous dropped coordinates while dragging
+        Display.removeClassFromCoordinates(
+            gameboard,
+            droppedShipCoordinates[shipName],
+            "dropped",
+        );
     }
 };
 
