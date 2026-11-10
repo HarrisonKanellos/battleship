@@ -85,7 +85,7 @@ const handleDragStartShip = (event) => {
     if (!target.classList.contains("ship-image")) {
         return;
     }
-    
+
     /* Create a custom drag image for vertical ships
         Image offset points to center of first cell occupied by ship */
     if (target.classList.contains("vertical")) {
@@ -95,9 +95,7 @@ const handleDragStartShip = (event) => {
             ".place-ships-scene-wrapper",
         );
 
-        verticalDragImageWrapper.classList.add(
-            "vertical-drag-image-wrapper",
-        );
+        verticalDragImageWrapper.classList.add("vertical-drag-image-wrapper");
 
         verticalDragImageWrapper.appendChild(verticalDragImage);
         placeShipsSceneWrapper.appendChild(verticalDragImageWrapper);

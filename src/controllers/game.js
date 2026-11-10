@@ -1,5 +1,6 @@
 import { placeShips } from "./placeShips.js";
 import { playGame } from "./playGame.js";
+import { gameOver } from "./gameOver.js";
 import * as Player from "../models/player.js";
 
 const players = {
@@ -27,5 +28,9 @@ const showPlayGame = () => {
 };
 
 const handleGameOver = (winner) => {
-    // TODO: Game ends logic - prompt to play again
+    gameOver(winner, players, playAgain);
+};
+
+const playAgain = () => {
+    showPlaceShips();
 };

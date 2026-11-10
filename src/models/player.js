@@ -20,10 +20,12 @@ function createRealPlayer(name) {
 }
 
 function createComputerPlayer() {
+    const name = "enemy";
     const { gameboard } = createPlayer();
     const actions = defineActions();
 
     return {
+        name,
         gameboard,
         actions,
     };
