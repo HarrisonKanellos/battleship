@@ -209,7 +209,7 @@ const renderShipStatuses = (playerType) => {
     for (const ship in shipImages) {
         if (playerType === "player") {
             const shipWrapper = renderPlayerShipStatusWrapper(ship);
-            shipsContainer.appendChild(shipWrapper)
+            shipsContainer.appendChild(shipWrapper);
         } else if (playerType === "enemy") {
             const shipWrapper = renderEnemyShipStatusWrapper(ship);
             shipsContainer.appendChild(shipWrapper);
@@ -395,6 +395,32 @@ const displayShipOnBoard = (gameboard, shipName, shipProperties) => {
     firstCoordinateCell.appendChild(shipImage);
 };
 
+const renderGameOver = (winnerName) => {
+    const gameOverDialog = document.createElement("dialog");
+    gameOverDialog.classList.add("game-over-modal");
+
+    const gameOverMessage = document.createElement("p");
+    gameOverMessage.classList.add("game-over-message");
+    if (winnerName === "enemy") {
+        gameOverMessage.textContent =
+            "DEFEAT: The enemy has destroyed all your ships!";
+    } else {
+        gameOverMessage.textContent = `Congatulations Fleet Admiral ${winnerName}, you have obliterated the enemy warships!`;
+    }
+
+    const playAgainButton = document.createElement("button");
+    playAgainButton.id = "button-play-again";
+    playAgainButton.textContent = "Play Again";
+
+    gameOverDialog.appendChild(gameOverMessage);
+    gameOverDialog.appendChild(playAgainButton);
+
+    const body = document.querySelector("body");
+    body.appendChild(gameOverDialog);
+
+    gameOverDialog.showModal();
+};
+
 export {
     renderPlaceShipsScene,
     resetShipPlacements,
@@ -405,4 +431,5 @@ export {
     getShipOverCoordinates,
     addClassToCoordinates,
     removeClassFromCoordinates,
+    renderGameOver,
 };
