@@ -38,6 +38,19 @@ main {
     height: 100%;
 }
 
+button {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+
+    background-color: grey;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 /* || General Gameboard Styles */
 .gameboard-wrapper {
     aspect-ratio: 1 / 1;
@@ -251,19 +264,6 @@ main {
 
     display: flex;
     gap: 40px;
-
-    button {
-        padding: 15px 25px;
-        border: none;
-        border-radius: 10px;
-        outline: none;
-
-        background-color: grey;
-        color: whitesmoke;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-    }
 }
 
 /* || Play Game Scene */
@@ -293,4 +293,29 @@ main {
 /* Missed attack on players gameboard cell */
 .player-gameboard .missed-attack {
     background-color: grey;
+}
+
+.game-over-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    
+    padding: 50px 0;
+    border: none;
+    margin: 0 auto;
+    width: 100vw;
+    top: 40vh;
+
+    background-color: #ffffff4b;
+}
+
+::backdrop {
+    background-color: aliceblue;
+    opacity: 0.4;
+}
+
+.game-over-message {
+    font-size: 1.5rem;
+    font-weight: bold;
 }
