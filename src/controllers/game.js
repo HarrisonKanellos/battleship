@@ -14,8 +14,8 @@ const initPlayers = () => {
 };
 
 export const startGame = () => {
-    initPlayers();
     // TODO: Modal to get players name
+    initPlayers();
     showPlaceShips();
 };
 
@@ -28,9 +28,10 @@ const showPlayGame = () => {
 };
 
 const handleGameOver = (winner) => {
-    gameOver(winner, players, playAgain);
+    gameOver(winner, playAgain);
 };
 
 const playAgain = () => {
+    initPlayers();
     showPlaceShips();
 };
